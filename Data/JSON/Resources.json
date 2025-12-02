@@ -1,0 +1,78 @@
+{
+  "resources": [
+    {
+      "key": "bgmTitle",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/BGM/BgmTitle.mp3",
+      "soundType": "bgm"
+    },
+    {
+      "key": "fontBokutachi",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Bokutachi.otf",
+      "fontName": "ぼくたちのゴシック"
+    },
+    {
+      "key": "fontDot",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Dot.otf",
+      "fontName": "ベストテンDOT"
+    },
+    {
+      "key": "fontHanazome",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Hanazome.ttf",
+      "fontName": "はなぞめフォント"
+    },
+    {
+      "key": "fontKazuki",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/KazukiReiwa.ttf",
+      "fontName": "KazukiReiwa"
+    },
+    {
+      "key": "bgmGame",
+      "sceneId": 2,
+      "type": "sound",
+      "path": "Data/Sound/BGM/BgmGame.mp3",
+      "soundType": "bgm"
+    },
+    {
+      "key": "seSelect",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeSelect.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seDecision",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeDecision.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "cracksEffect",
+      "sceneId": 1,
+      "type": "pixelShader",
+      "path": "Data/Shader/Cracks.cso"
+    },
+    {
+      "key": "cracksNormalMap",
+      "sceneId": 1,
+      "type": "texture",
+      "path": "Data/Image/CracksNormalMap.png"
+    },
+    {
+      "key": "titleImage",
+      "sceneId": 1,
+      "type": "texture",
+      "path": "Data/Image/TitleImage.jpg"
+    }
+  ]
+}
