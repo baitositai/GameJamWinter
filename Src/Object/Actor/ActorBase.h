@@ -33,7 +33,7 @@ public:
 	/// </summary>
 	virtual void Init();
 
-	/// <summary>
+	/// <summary> 
 	/// ƒƒCƒ“‚ÌXV
 	/// </summary>
 	virtual void Update();

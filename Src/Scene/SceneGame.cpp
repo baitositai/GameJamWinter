@@ -28,7 +28,7 @@ void SceneGame::Init(void)
 	constexpr int FONT_SIZE = 32;
 	int font = fontMng_.CreateMyFont(resMng_.GetFontName("fontKazuki"), FONT_SIZE, 0);
 	text_.color = UtilityCommon::BLACK;
-	text_.string = L"ƒƒCƒ“‚¾‚æ‚§";
+	/*text_.string = L"ƒƒCƒ“‚¾‚æ‚§";*/
 	text_.fontHandle = font;
 	text_.pos = { Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y };
 

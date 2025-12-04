@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Src\Core\PostEffect\PostEffectCracks.cpp" />
     <ClCompile Include="Src\Core\Common\GlitchScreen.cpp" />
     <ClCompile Include="Src\Manager\Game\CollisionManager.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Src\Common\Image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Actor\Enemy\Enemy.h" />
     <ClInclude Include="Src\Core\PostEffect\PostEffectCracks.h" />
     <ClInclude Include="Src\Core\Common\GlitchScreen.h" />
     <ClInclude Include="Src\Manager\Game\CollisionManager.h" />
