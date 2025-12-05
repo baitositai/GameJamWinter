@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
 #include "SceneBase.h"
-#include "../Common/CharacterString.h"
+
 class ScenePause;
+class Stage;
 
 class SceneGame : public SceneBase
 {
@@ -25,8 +26,10 @@ public:
 
 private:
 
-	// テキスト
-	CharacterString text_;
+	// ステージ
+	std::unique_ptr<Stage> stage_;
+
+	// スカイドーム
 
 	//ポーズ画面
 	std::shared_ptr<ScenePause> ScenePause_;

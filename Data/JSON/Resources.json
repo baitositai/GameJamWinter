@@ -73,6 +73,18 @@
       "sceneId": 1,
       "type": "texture",
       "path": "Data/Image/TitleImage.jpg"
+    },
+    {
+      "key": "stage",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Stage/Stage.mv1"
+    },
+    {
+      "key": "skyDome",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Stage/SkyDome.mv1"
     }
   ]
 }

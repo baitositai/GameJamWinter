@@ -21,12 +21,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~ActorBase();
-
-	/// <summary>
-	/// 読み込み
-	/// </summary>
-	virtual void Load();
+	virtual ~ActorBase();
 
 	/// <summary>
 	/// 初期化

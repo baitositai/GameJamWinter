@@ -6,6 +6,7 @@
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
+#include "../Object/Actor/Stage/Stage.h"
 #include "../Utility/UtilityCommon.h"
 #include "ScenePause.h"
 #include "SceneGame.h"
@@ -25,19 +26,18 @@ SceneGame::~SceneGame()
 
 void SceneGame::Init(void)
 {
-	constexpr int FONT_SIZE = 32;
-	int font = fontMng_.CreateMyFont(resMng_.GetFontName("fontKazuki"), FONT_SIZE, 0);
-	text_.color = UtilityCommon::BLACK;
-	text_.string = L"メインだよぉ";
-	text_.fontHandle = font;
-	text_.pos = { Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y };
-
 	// ポーズ画面のリソース
 	ScenePause_ = std::make_shared<ScenePause>();
 	ScenePause_->Load();
 
+	// ステージ
+	stage_ = std::make_unique<Stage>();
+	stage_->Init();
+
 	// BGMの再生
 	sndMng_.PlayBgm(SoundType::BGM::GAME);
+
+	mainCamera.ChangeMode(Camera::MODE::FREE);
 }
 
 void SceneGame::NormalUpdate(void)
@@ -48,6 +48,9 @@ void SceneGame::NormalUpdate(void)
 		scnMng_.PushScene(ScenePause_);
 		return;
 	}
+
+	// ステージの更新
+	stage_->Update();
 
 #ifdef _DEBUG	
 
@@ -63,6 +66,9 @@ void SceneGame::NormalDraw(void)
 	DebugDraw();
 
 #endif
+
+	// ステージの描画
+	stage_->Draw();
 }
 
 void SceneGame::ChangeNormal(void)
@@ -88,5 +94,4 @@ void SceneGame::DebugUpdate(void)
 void SceneGame::DebugDraw(void)
 {
 	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
-	text_.DrawCenter();
 }

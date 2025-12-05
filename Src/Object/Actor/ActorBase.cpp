@@ -23,13 +23,10 @@ ActorBase::~ActorBase()
 {
 }
 
-void ActorBase::Load()
-{
-	AddCollider();
-}
-
 void ActorBase::Init()
 {
+	AddCollider();
+
 	InitTransform();
 }
 
