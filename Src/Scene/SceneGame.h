@@ -26,6 +26,10 @@ public:
 
 private:
 
+	static constexpr VECTOR FIX_CAMERA_POS = { 300.0f, 595.0f, 926.0f };
+	static constexpr VECTOR FIX_CAMERA_TARGET_POS = { 300.0f, 505.0f, 750.0f };
+	static constexpr VECTOR FIX_CAMERA_ANGLES = { 0.52f,3.15f, 0.0f };
+
 	// ステージ
 	std::unique_ptr<Stage> stage_;
 

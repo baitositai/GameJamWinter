@@ -37,7 +37,11 @@ void SceneGame::Init(void)
 	// BGMの再生
 	sndMng_.PlayBgm(SoundType::BGM::GAME);
 
+	// カメラを固定
 	mainCamera.ChangeMode(Camera::MODE::FREE);
+	mainCamera.SetPos(FIX_CAMERA_POS);
+	mainCamera.SetTargetPos(FIX_CAMERA_TARGET_POS);
+	mainCamera.SetAngles(FIX_CAMERA_ANGLES);
 }
 
 void SceneGame::NormalUpdate(void)
@@ -61,14 +65,14 @@ void SceneGame::NormalUpdate(void)
 
 void SceneGame::NormalDraw(void)
 {	
+	// ステージの描画
+	stage_->Draw();
+
 #ifdef _DEBUG
 
 	DebugDraw();
 
 #endif
-
-	// ステージの描画
-	stage_->Draw();
 }
 
 void SceneGame::ChangeNormal(void)
@@ -93,5 +97,13 @@ void SceneGame::DebugUpdate(void)
 
 void SceneGame::DebugDraw(void)
 {
-	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
+	// カメラ位置
+	VECTOR cPos = mainCamera.GetPos();
+	VECTOR cTarget = mainCamera.GetTargetPos();
+	VECTOR cAngles = mainCamera.GetAngles();
+
+	//DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
+	DrawFormatString(0, 60, UtilityCommon::RED, L"カメラ位置：%2f,%2f,%2f", cPos.x, cPos.y, cPos.z);
+	DrawFormatString(0, 80, UtilityCommon::RED, L"注視点位置：%2f,%2f,%2f", cTarget.x, cTarget.y, cTarget.z);
+	DrawFormatString(0, 100, UtilityCommon::RED, L"カメラ角度：%2f,%2f,%2f", cAngles.x, cAngles.y, cAngles.z);
 }
