@@ -36,10 +36,10 @@ private:
 	std::shared_ptr<ScenePause> ScenePause_;
 
 	// 落とし穴
-	std::map<int, Pitfall*> pitfalls_;
+	std::map<int, std::vector<std::shared_ptr<Pitfall>>> pitfalls_;
 
 	// プレイヤー
-	std::vector<Player*> player_;
+	std::vector<std::shared_ptr<Player>> player_;
 
 
 	// 更新関数

@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include <map>
 #include <vector>
+#include <string>
 #include "../Application.h"
 #include "../Manager/Common/SceneManager.h"
 #include "../Manager/Common/Camera.h"
@@ -42,7 +43,7 @@ void SceneGame::Init(void)
 
 	for (auto& player : player_)
 	{
-		player = new Player();
+		player = std::make_shared<Player>(Transform::Transform());
 		player_.emplace_back(player);
 	}
 
@@ -61,13 +62,17 @@ void SceneGame::NormalUpdate(void)
 
 	if (!player_.empty())
 	{
-		for (int i = 0; i < player_.size(); i++)
+		int playerCnt = 0;
+		for (auto& player : player_)
 		{
-			player_.at(i).
-			if (inputMng_.IsTrgDown(InputManager::TYPE::PLAYER_ACTION), Input::JOYPAD_NO::PAD1))
+			// —Ž‚Æ‚µŒŠ¶¬
+			if (inputMng_.IsTrgDown(InputManager::TYPE::PLAYER_ACTION, Input::JOYPAD_NO::PAD1))
 			{
-
+				Transform transform = player.get()->GetTransform();
+				pitfalls_[playerCnt].emplace_back(std::make_shared<Pitfall>(transform));
 			}
+
+			playerCnt++;
 		}
 	}
 
@@ -111,4 +116,25 @@ void SceneGame::DebugDraw(void)
 {
 	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
 	text_.DrawCenter();
+
+	// Še—Ž‚Æ‚µŒŠˆÊ’u
+	int textY = 1;
+	const int Y = 16;
+	if (!pitfalls_.empty())
+	{
+		for (auto& [pCnt, pitfall] : pitfalls_)
+		{
+			if (pitfall.empty()) { continue; }
+
+			std::wstring text = L"P" + std::to_wstring(pCnt) + L":";
+			for (int i = 0; i < pitfall.size(); i++)
+			{
+				std::wstring num = L"[" + std::to_wstring(pitfall[i].get()->GetTransform().pos.x) + L","
+					+ std::to_wstring(pitfall[i].get()->GetTransform().pos.z) + L"]";
+				text += num;
+			}
+
+			DrawString(0, (Y * (pCnt + 1)), text.c_str(), 0xffffff);
+		}
+	}
 }

@@ -17,7 +17,7 @@ public:
 		FALL
 	};
 
-	Player();
+	Player(const Transform& _transform);
 
 	~Player() = default;
 

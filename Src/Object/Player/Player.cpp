@@ -1,9 +1,9 @@
 #include "Player.h"
 #include "../Pitfall/Pitfall.h"
 
-Player::Player()
+Player::Player(const Transform& _transform)
 {
-
+    transform_ = _transform;
 }
 
 void Player::Init(void)
