@@ -3,7 +3,10 @@
 #include "SceneBase.h"
 
 class ScenePause;
+class Shadow;
 class Stage;
+class SkyDome;
+class ControllerEffect;
 
 class SceneGame : public SceneBase
 {
@@ -30,10 +33,17 @@ private:
 	static constexpr VECTOR FIX_CAMERA_TARGET_POS = { 300.0f, 505.0f, 750.0f };
 	static constexpr VECTOR FIX_CAMERA_ANGLES = { 0.52f,3.15f, 0.0f };
 
+	// エフェクトの制御
+	std::unique_ptr<ControllerEffect> effect_;
+
+	// 影
+	std::unique_ptr<Shadow> shadow_;
+
 	// ステージ
 	std::unique_ptr<Stage> stage_;
 
 	// スカイドーム
+	std::unique_ptr<SkyDome> skyDome_;
 
 	//ポーズ画面
 	std::shared_ptr<ScenePause> ScenePause_;

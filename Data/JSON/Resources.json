@@ -84,7 +84,7 @@
       "key": "skyDome",
       "sceneId": 0,
       "type": "model",
-      "path": "Data/Model/Stage/SkyDome.mv1"
+      "path": "Data/Model/SkyDome/SkyDome.mv1"
     },
     {
       "key": "petalFall",

@@ -68,11 +68,17 @@ public:
 
 private:
 
+	// リソースID
+	int resourceId_;
+
 	// 再生ID
 	int playId_;	
 	
 	// 速度
 	float speed_;
+
+	// ループ判定
+	bool isLoop_;
 
 	// 座標
 	VECTOR pos_;

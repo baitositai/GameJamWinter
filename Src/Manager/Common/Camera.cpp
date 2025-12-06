@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
 #include <algorithm>
+#include "../../Manager/Common/ResourceManager.h"
 #include "../../Application.h"
 #include "../../Utility/Utility3D.h"
 #include "../../Utility//UtilityCommon.h"

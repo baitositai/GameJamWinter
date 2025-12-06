@@ -7,7 +7,11 @@
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
 #include "../Object/Actor/Stage/Stage.h"
+#include "../Object/Actor/Stage/SkyDome.h"
+#include "../Object/Common/ControllerEffect.h"
+#include "../Object/Enviroment/Shadow.h"
 #include "../Utility/UtilityCommon.h"
+#include "../Utility/Utility3D.h"
 #include "ScenePause.h"
 #include "SceneGame.h"
 
@@ -30,9 +34,20 @@ void SceneGame::Init(void)
 	ScenePause_ = std::make_shared<ScenePause>();
 	ScenePause_->Load();
 
+	// 影
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Init();
+
 	// ステージ
 	stage_ = std::make_unique<Stage>();
 	stage_->Init();
+
+	// スカイドーム
+	skyDome_ = std::make_unique<SkyDome>();
+	skyDome_->Init();
+
+	// エフェクト制御
+	effect_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("petalFall"));
 
 	// BGMの再生
 	sndMng_.PlayBgm(SoundType::BGM::GAME);
@@ -42,6 +57,9 @@ void SceneGame::Init(void)
 	mainCamera.SetPos(FIX_CAMERA_POS);
 	mainCamera.SetTargetPos(FIX_CAMERA_TARGET_POS);
 	mainCamera.SetAngles(FIX_CAMERA_ANGLES);
+
+	// 再生
+	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), Utility3D::VECTOR_ZERO, 1.0f);
 }
 
 void SceneGame::NormalUpdate(void)
@@ -56,6 +74,9 @@ void SceneGame::NormalUpdate(void)
 	// ステージの更新
 	stage_->Update();
 
+	// スカイドームの更新
+	skyDome_->Update();
+
 #ifdef _DEBUG	
 
 	DebugUpdate();
@@ -65,8 +86,34 @@ void SceneGame::NormalUpdate(void)
 
 void SceneGame::NormalDraw(void)
 {	
+	const int shadowMapHandle = shadow_->GetShadowMapHandle();
+
+	// スカイドームの描画
+	skyDome_->Draw();
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+
+	// シャドウマップへの描画の準備
+	ShadowMap_DrawSetup(shadowMapHandle);
+
 	// ステージの描画
 	stage_->Draw();
+
+	// シャドウマップへの描画を終了
+	ShadowMap_DrawEnd();
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// 描画に使用するシャドウマップを設定
+	SetUseShadowMap(0, shadowMapHandle);
+
+
+
+	// ステージの描画
+	stage_->Draw();
+
+	// 描画に使用するシャドウマップの設定を解除
+	SetUseShadowMap(0, -1);
 
 #ifdef _DEBUG
 
@@ -102,7 +149,6 @@ void SceneGame::DebugDraw(void)
 	VECTOR cTarget = mainCamera.GetTargetPos();
 	VECTOR cAngles = mainCamera.GetAngles();
 
-	//DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
 	DrawFormatString(0, 60, UtilityCommon::RED, L"カメラ位置：%2f,%2f,%2f", cPos.x, cPos.y, cPos.z);
 	DrawFormatString(0, 80, UtilityCommon::RED, L"注視点位置：%2f,%2f,%2f", cTarget.x, cTarget.y, cTarget.z);
 	DrawFormatString(0, 100, UtilityCommon::RED, L"カメラ角度：%2f,%2f,%2f", cAngles.x, cAngles.y, cAngles.z);
