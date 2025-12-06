@@ -24,6 +24,8 @@
     <ClCompile Include="Src\Manager\Game\CollisionManager.cpp" />
     <ClCompile Include="Src\Manager\Game\CollisionTags.cpp" />
     <ClCompile Include="Src\Manager\Game\GameEffectManager.cpp" />
+    <ClCompile Include="Src\Object\Pitfall\Pitfall.cpp" />
+    <ClCompile Include="Src\Object\Player\Player.cpp" />
     <ClCompile Include="Src\Render\BillboardRenderer.cpp" />
     <ClCompile Include="Src\Common\Loading.cpp" />
     <ClCompile Include="Src\Manager\Common\SoundType.cpp" />
@@ -92,6 +94,8 @@
     <ClInclude Include="Src\Manager\Game\CollisionManager.h" />
     <ClInclude Include="Src\Manager\Game\CollisionTags.h" />
     <ClInclude Include="Src\Manager\Game\GameEffectManager.h" />
+    <ClInclude Include="Src\Object\Pitfall\Pitfall.h" />
+    <ClInclude Include="Src\Object\Player\Player.h" />
     <ClInclude Include="Src\Render\BillboardRenderer.h" />
     <ClInclude Include="Src\Common\Loading.h" />
     <ClInclude Include="Src\Manager\Common\SoundType.h" />

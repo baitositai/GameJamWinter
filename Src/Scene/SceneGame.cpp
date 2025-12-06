@@ -1,4 +1,6 @@
 #include <DxLib.h>
+#include <map>
+#include <vector>
 #include "../Application.h"
 #include "../Manager/Common/SceneManager.h"
 #include "../Manager/Common/Camera.h"
@@ -6,6 +8,8 @@
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
+#include "../Object/Pitfall/Pitfall.h"
+#include "../Object/Player/Player.h"
 #include "../Utility/UtilityCommon.h"
 #include "ScenePause.h"
 #include "SceneGame.h"
@@ -36,6 +40,12 @@ void SceneGame::Init(void)
 	ScenePause_ = std::make_shared<ScenePause>();
 	ScenePause_->Load();
 
+	for (auto& player : player_)
+	{
+		player = new Player();
+		player_.emplace_back(player);
+	}
+
 	// BGMÇÃçƒê∂
 	sndMng_.PlayBgm(SoundType::BGM::GAME);
 }
@@ -47,6 +57,18 @@ void SceneGame::NormalUpdate(void)
 	{
 		scnMng_.PushScene(ScenePause_);
 		return;
+	}
+
+	if (!player_.empty())
+	{
+		for (int i = 0; i < player_.size(); i++)
+		{
+			player_.at(i).
+			if (inputMng_.IsTrgDown(InputManager::TYPE::PLAYER_ACTION), Input::JOYPAD_NO::PAD1))
+			{
+
+			}
+		}
 	}
 
 #ifdef _DEBUG	

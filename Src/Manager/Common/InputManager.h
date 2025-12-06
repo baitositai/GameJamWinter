@@ -24,7 +24,7 @@ public:
 		PLAYER_MOVE_LEFT,		// 移動左
 		PLAYER_MOVE_UP,			// 移動上
 		PLAYER_MOVE_DOWN,		// 移動下
-		PLAYER_JUMP,			// ジャンプ
+		PLAYER_ACTION,			// ジャンプ
 		PLAYER_DASH,			// ダッシュ
 
 		CAMERA_MOVE_RIGHT,		// カメラ右移動
