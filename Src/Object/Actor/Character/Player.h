@@ -52,6 +52,12 @@ public:
 	const bool IsCreatePitFall() const { return isCreatePitFall_; }
 
 	/// <summary>
+	/// 無敵判定を返す
+	/// </summary>
+	/// <returns>無敵判定</returns>
+	const bool IsInvincible() const { return isInvincible_; }
+
+	/// <summary>
 	/// 落とし穴が生成可能状態へ戻す
 	/// </summary>
 	void SetCreatePitFall() { isCreatePitFall_ = true; }
@@ -76,6 +82,9 @@ private:
 	// 復帰までの時間
 	static constexpr float RESPOWN_TIME = 2.0f;
 
+	// 無敵時間
+	static constexpr float INVINCIBLE = 2.0f;
+
 	// PAD番号
 	const Input::JOYPAD_NO MY_PAD_NO;
 
@@ -84,6 +93,9 @@ private:
 
 	// 落とし穴の生成判定
 	bool isCreatePitFall_;
+
+	// 無敵判定
+	bool isInvincible_;
 
 	// 落とし穴を生成する位置
 	VECTOR createPitFallPos_;
@@ -107,6 +119,9 @@ private:
 
 	// タイマー
 	std::unique_ptr<Timer> timer_;
+
+	// 無敵時間用のタイマー
+	std::unique_ptr<Timer> invincibleTimer_;
 
 	// 更新処理
 	std::function<void()> actionUpdate_;
@@ -134,6 +149,9 @@ private:
 
 	// 移動制限
 	void MoveLimit();
+
+	// 無敵処理
+	void Invincible();
 
 	// 回転
 	void SetGoalRotate(double rotRad);

@@ -79,6 +79,11 @@ void Camera::SetAngles(const VECTOR& angles)
 	angles_ = angles;
 }
 
+void Camera::SetCameraUpVector(const VECTOR& cameraUpVector)
+{
+	cameraUp_ = cameraUpVector;
+}
+
 VECTOR Camera::GetPos(void) const
 {
 	return pos_;
@@ -92,6 +97,11 @@ VECTOR Camera::GetAngles(void) const
 VECTOR Camera::GetTargetPos(void) const
 {
 	return targetPos_;
+}
+
+const VECTOR& Camera::GetCameraUpVector() const
+{
+	return cameraUp_;
 }
 
 Quaternion Camera::GetQuaRot(void) const

@@ -12,7 +12,9 @@ class Pitfall;
 class Stage;
 class SkyDome;
 class ControllerEffect;
+class ControllerCamera;
 class Timer;
+class Score;
 
 class SceneGame : public SceneBase
 {
@@ -52,6 +54,12 @@ public:
 
 private:
 	
+	// タイトル視点
+	static constexpr VECTOR TITLE_FIX_CAMERA_POS = { 300.0f, 1350, 1120.0f };
+	static constexpr VECTOR TITLE_FIX_CAMERA_TARGET_POS = { 300.0f, 1400.0f, 930.0f };
+	static constexpr VECTOR TITLE_FIX_CAMERA_ANGLES = { -0.35,3.15f, 0.0f };
+
+	// メインゲーム視点
 	static constexpr VECTOR FIX_CAMERA_POS = { 300.0f, 595.0f, 926.0f };
 	static constexpr VECTOR FIX_CAMERA_TARGET_POS = { 300.0f, 505.0f, 750.0f };
 	static constexpr VECTOR FIX_CAMERA_ANGLES = { 0.52f,3.15f, 0.0f };
@@ -61,8 +69,17 @@ private:
 	static constexpr float SECOND_ENEMY_CREATE_TIME = 1.0f;
 	static constexpr float THIRD_ENEMY_CREATE_TIME = 0.6f;
 
+	// ゲーム時間
+	static constexpr float GAME_TIME = 30.0f;
+
+	// 状態
+	STATE state_;
+
 	// エフェクトの制御
 	std::unique_ptr<ControllerEffect> effect_;
+
+	// カメラ制御
+	std::unique_ptr<ControllerCamera> camera_;
 
 	// 影
 	std::unique_ptr<Shadow> shadow_;
@@ -88,6 +105,18 @@ private:
 	// 敵の生成用タイマー
 	std::unique_ptr<Timer> enemyCreateTimer_;
 
+	// ゲームタイマー
+	std::unique_ptr<Timer> gameTimer_;
+
+	// スコア
+	std::unique_ptr<Score> score_;
+
+	// 状態別更新処理
+	std::function<void()> update_;
+
+	// 状態遷移管理
+	std::unordered_map<STATE, std::function<void()>> changeStateMap_;
+
 	// 更新関数
 	void NormalUpdate() override;
 
@@ -105,6 +134,28 @@ private:
 
 	// 衝突判定処理
 	void Collision();
+
+	// リセット処理
+	void Reset();
+
+	// 状態遷移処理
+	void ChangeState(const STATE state);
+	void ChangeStateTitle();
+	void ChangeStateCameraRollDown();
+	void ChangeStateReady();
+	void ChangeStateMain();
+	void ChangeStateEnd();
+	void ChangeStateResult();
+	void ChangeStateCameraRollUp();
+
+	// 状態別更新処理
+	void UpdateTitle();
+	void UpdateCameraRollDown();
+	void UpdateReady();
+	void UpdateMain();
+	void UpdateEnd();
+	void UpdateResult();
+	void UpdateCameraRollUp();
 
 	//デバッグ処理
 	void DebugUpdate();

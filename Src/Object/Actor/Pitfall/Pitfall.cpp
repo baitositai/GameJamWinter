@@ -5,10 +5,10 @@
 #include "../../Collider/ColliderSphere.h"
 #include "Pitfall.h"
 
-Pitfall::Pitfall(const VECTOR& pos) :
-	INIT_POS(pos)
+Pitfall::Pitfall(const int ownerNo, const VECTOR& pos):
+	INIT_POS(pos),
+	OWNER_NO(ownerNo)
 {
-
 }
 
 Pitfall::~Pitfall()

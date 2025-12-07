@@ -120,6 +120,12 @@ public:
 	VECTOR GetTargetPos() const;
 
 	/// <summary>
+	/// カメラの上方向ベクトルの取得
+	/// </summary>
+	/// <returns>カメラの上方向を返す</returns>
+	const VECTOR& GetCameraUpVector() const;
+
+	/// <summary>
 	/// カメラ角度の取得
 	/// </summary>
 	/// <param name=""></param>
@@ -175,6 +181,12 @@ public:
 	/// </summary>
 	/// <param name="angles">角度</param>
 	void SetAngles(const VECTOR& angles);
+
+	/// <summary>
+	/// カメラ上方向ベクトルの設定
+	/// </summary>
+	/// <param name="cameraUpVector">カメラ方向</param>
+	void SetCameraUpVector(const VECTOR& cameraUpVector);
 
 private:
 

@@ -33,6 +33,9 @@ void InputManager::Init()
 	RegisterTrigger(TYPE::SELECT_CANCEL, { KEY_INPUT_BACK }, { BTN::RB_DOWN });
 	RegisterTrigger(TYPE::PAUSE, { KEY_INPUT_BACK }, { BTN::SELECT });
 
+	// ÉQÅ[ÉÄèÛë‘ëJà⁄
+	RegisterTrigger(TYPE::GAME_STATE_CHANGE, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT });
+
 	RegisterTrigger(TYPE::DEBUG_SCENE_CHANGE, { KEY_INPUT_RSHIFT }, { });
 }
 

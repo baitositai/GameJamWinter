@@ -10,8 +10,9 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="pos"></param>
-	Pitfall(const VECTOR& pos);
+	/// <param name="ownerNo">所有者の番号</param>
+	/// <param name="pos">位置</param>
+	Pitfall(const int ownerNo, const VECTOR& pos);
 
 	/// <summary>
 	/// デストラクタ
@@ -24,7 +25,16 @@ public:
 	/// <returns>コライダー情報</returns>
 	const std::shared_ptr<ColliderSphere>& GetSphere() const { return collider_; }
 
+	/// <summary>
+	/// 所有者の番号を返す
+	/// </summary>
+	/// <returns>所有者の番号</returns>
+	const int GetOwnerNo() const { return OWNER_NO; }
+
 private:
+
+	// 所有者の番号
+	const int OWNER_NO;
 
 	// 初期位置
 	const VECTOR INIT_POS;

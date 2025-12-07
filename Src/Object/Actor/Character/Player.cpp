@@ -20,6 +20,7 @@ Player::Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo) :
 	moveSpeed_ = 0.0f;
 	actionState_ = ACTION_STATE::NONE;
 	isCreatePitFall_ = false;
+	isInvincible_ = false;
 
 	// 状態遷移関数の登録
 	changeActionStateMap_.emplace(ACTION_STATE::NONE, std::bind(&Player::ChangeActionStateNone, this));
@@ -38,6 +39,10 @@ void Player::Init(void)
 	// リスポン用タイマーの生成
 	timer_ = std::make_unique<Timer>(RESPOWN_TIME);
 	timer_->InitCountUp();
+
+	// 無敵時間タイマーの生成
+	invincibleTimer_ = std::make_unique<Timer>(INVINCIBLE);
+	invincibleTimer_->InitCountUp();
 
 	// アクションの初期状態
 	ChangeActionState(ACTION_STATE::MOVE);
@@ -67,11 +72,17 @@ void Player::UpdateFall()
 	// 復帰処理
 	if (timer_->CountUp())
 	{
+		// 初期位置に戻す
+		transform_.pos = INIT_POS;
+
 		// 状態遷移
 		ChangeState(STATE::ACTION);
 
 		// アクションの状態も移動に変更
 		ChangeActionState(ACTION_STATE::MOVE);
+
+		// しばらくの間無敵設定
+		isInvincible_ = true;
 	}
 }
 
@@ -112,6 +123,9 @@ void Player::UpdateActionMove()
 
 	// 回転の反映
 	Rotate();
+
+	// 無敵処理
+	Invincible();
 
 	// 移動座標の反映
 	transform_.pos = movedPos_;
@@ -200,6 +214,20 @@ void Player::MoveLimit()
 	else if (movedPos_.z < SceneGame::MOVE_LIMIT_MIN_Z)
 	{
 		movedPos_.z = SceneGame::MOVE_LIMIT_MIN_Z;
+	}
+}
+
+void Player::Invincible()
+{
+	// 無敵の場合
+	if (isInvincible_)
+	{
+		// タイマーを更新
+		if (invincibleTimer_->CountUp())
+		{
+			// 無敵終了
+			isInvincible_ = false;
+		}
 	}
 }
 

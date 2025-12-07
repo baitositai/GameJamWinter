@@ -31,6 +31,8 @@ public:
 		CAMERA_MOVE_UP,			// カメラ上移動
 		CAMERA_MOVE_DOWN,		// カメラ下移動
 
+		GAME_STATE_CHANGE,		// ゲーム状態遷移
+
 		SELECT_RIGHT,			// 選択右
 		SELECT_LEFT,			// 選択左
 		SELECT_DOWN,			// 選択下
