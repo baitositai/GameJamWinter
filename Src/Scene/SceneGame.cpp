@@ -1,4 +1,7 @@
 #include <DxLib.h>
+#include <map>
+#include <vector>
+#include <string>
 #include "../Application.h"
 #include "../Manager/Common/SceneManager.h"
 #include "../Manager/Common/Camera.h"
@@ -6,6 +9,8 @@
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
+#include "../Object/Pitfall/Pitfall.h"
+#include "../Object/Player/Player.h"
 #include "../Object/Actor/Stage/Stage.h"
 #include "../Utility/UtilityCommon.h"
 #include "ScenePause.h"
@@ -30,6 +35,12 @@ void SceneGame::Init(void)
 	ScenePause_ = std::make_shared<ScenePause>();
 	ScenePause_->Load();
 
+	for (auto& player : player_)
+	{
+		player = std::make_shared<Player>(Transform::Transform());
+		player_.emplace_back(player);
+	}
+
 	// ステージ
 	stage_ = std::make_unique<Stage>();
 	stage_->Init();
@@ -47,6 +58,22 @@ void SceneGame::NormalUpdate(void)
 	{
 		scnMng_.PushScene(ScenePause_);
 		return;
+	}
+
+	if (!player_.empty())
+	{
+		int playerCnt = 0;
+		for (auto& player : player_)
+		{
+			// 落とし穴生成
+			if (inputMng_.IsTrgDown(InputManager::TYPE::PLAYER_ACTION, Input::JOYPAD_NO::PAD1))
+			{
+				Transform transform = player.get()->GetTransform();
+				pitfalls_[playerCnt].emplace_back(std::make_shared<Pitfall>(transform));
+			}
+
+			playerCnt++;
+		}
 	}
 
 	// ステージの更新
@@ -94,4 +121,25 @@ void SceneGame::DebugUpdate(void)
 void SceneGame::DebugDraw(void)
 {
 	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
+
+	// 各落とし穴位置
+	int textY = 1;
+	const int Y = 16;
+	if (!pitfalls_.empty())
+	{
+		for (auto& [pCnt, pitfall] : pitfalls_)
+		{
+			if (pitfall.empty()) { continue; }
+
+			std::wstring text = L"P" + std::to_wstring(pCnt) + L":";
+			for (int i = 0; i < pitfall.size(); i++)
+			{
+				std::wstring num = L"[" + std::to_wstring(pitfall[i].get()->GetTransform().pos.x) + L","
+					+ std::to_wstring(pitfall[i].get()->GetTransform().pos.z) + L"]";
+				text += num;
+			}
+
+			DrawString(0, (Y * (pCnt + 1)), text.c_str(), 0xffffff);
+		}
+	}
 }

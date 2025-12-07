@@ -1,8 +1,12 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include <map>
 #include "SceneBase.h"
 
 class ScenePause;
+class Player;
+class Pitfall;
 class Stage;
 
 class SceneGame : public SceneBase
@@ -33,6 +37,13 @@ private:
 
 	//ポーズ画面
 	std::shared_ptr<ScenePause> ScenePause_;
+
+	// 落とし穴
+	std::map<int, std::vector<std::shared_ptr<Pitfall>>> pitfalls_;
+
+	// プレイヤー
+	std::vector<std::shared_ptr<Player>> player_;
+
 
 	// 更新関数
 	void NormalUpdate() override;
