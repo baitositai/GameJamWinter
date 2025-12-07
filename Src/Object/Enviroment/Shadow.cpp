@@ -22,8 +22,6 @@ void Shadow::Init()
 
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(shadowMapHandle_, SHADOW_MAP_MIN_AREA, SHADOW_MAP_MAX_AREA);
-
-	SetShadowMapAdjustDepth(shadowMapHandle_, 0.1f);
 }
 
 void Shadow::SetUp()

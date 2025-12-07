@@ -6,6 +6,7 @@
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
+#include "../Manager/Game/ShadowManager.h"
 #include "../Object/Actor/Stage/Stage.h"
 #include "../Object/Actor/Stage/SkyDome.h"
 #include "../Object/Common/ControllerEffect.h"
@@ -25,7 +26,6 @@ SceneGame::SceneGame()
 
 SceneGame::~SceneGame()
 {
-
 }
 
 void SceneGame::Init(void)
@@ -91,23 +91,15 @@ void SceneGame::NormalDraw(void)
 	// スカイドームの描画
 	skyDome_->Draw();
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-
-	// シャドウマップへの描画の準備
-	ShadowMap_DrawSetup(shadowMapHandle);
+	shadow_->SetUp();
 
 	// ステージの描画
 	stage_->Draw();
 
-	// シャドウマップへの描画を終了
-	ShadowMap_DrawEnd();
-
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	shadow_->Terminate();
 
 	// 描画に使用するシャドウマップを設定
 	SetUseShadowMap(0, shadowMapHandle);
-
-
 
 	// ステージの描画
 	stage_->Draw();

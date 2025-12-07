@@ -38,8 +38,8 @@ public:
 private:
 
 	// âeÇÃëÂÇ´Ç≥
-	static constexpr float SHADOW_SCALE_X = 4112;
-	static constexpr float SHADOW_SCALE_Y = 4112;
+	static constexpr float SHADOW_SCALE_X = 4096;
+	static constexpr float SHADOW_SCALE_Y = 4096;
 
 	// âeÇÃç≈è¨à íu
 	static constexpr VECTOR SHADOW_MAP_MIN_AREA = { -3000, -1, -1000 };

@@ -32,7 +32,6 @@ void ModelMaterial::AddConstBufVS(const FLOAT4& contBuf)
 	{
 		constBufsVS_.emplace_back(contBuf);
 	}
-
 }
 
 void ModelMaterial::AddConstBufPS(const FLOAT4& contBuf)
@@ -106,6 +105,23 @@ ModelMaterial::TEXADDRESS ModelMaterial::GetTextureAddress(void) const
 void ModelMaterial::SetTextureAddress(TEXADDRESS texA)
 {
 	texAddress_ = texA;
+}
+
+const std::map<int, MATRIX>& ModelMaterial::GetMatrixs() const
+{
+	return matrixs_;
+}
+
+void ModelMaterial::SetConstMtx(const int idx, const MATRIX& mat)
+{
+	if (matrixs_.count(idx) == 0)
+	{
+		matrixs_.emplace(idx, mat);
+	}
+	else
+	{
+		matrixs_[idx] = mat;
+	}
 }
 
 int ModelMaterial::GetShaderVS(void) const
