@@ -46,8 +46,8 @@ void SceneGame::Init(void)
 	}
 
 	// 影
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Init();
+	//shadow_ = std::make_unique<Shadow>();
+	//shadow_->Init();
 
 	// ステージ
 	stage_ = std::make_unique<Stage>();
@@ -113,26 +113,26 @@ void SceneGame::NormalUpdate(void)
 
 void SceneGame::NormalDraw(void)
 {	
-	const int shadowMapHandle = shadow_->GetShadowMapHandle();
+	//const int shadowMapHandle = shadow_->GetShadowMapHandle();
 
 	// スカイドームの描画
 	skyDome_->Draw();
 
-	shadow_->SetUp();
+	//shadow_->SetUp();
 
 	// ステージの描画
 	stage_->Draw();
 
-	shadow_->Terminate();
+	//shadow_->Terminate();
 
-	// 描画に使用するシャドウマップを設定
-	SetUseShadowMap(0, shadowMapHandle);
+	//// 描画に使用するシャドウマップを設定
+	//SetUseShadowMap(0, shadowMapHandle);
 
 	// ステージの描画
-	stage_->Draw();
+	//stage_->Draw();
 
-	// 描画に使用するシャドウマップの設定を解除
-	SetUseShadowMap(0, -1);
+	//// 描画に使用するシャドウマップの設定を解除
+	//SetUseShadowMap(0, -1);
 
 #ifdef _DEBUG
 
@@ -163,7 +163,7 @@ void SceneGame::DebugUpdate(void)
 
 void SceneGame::DebugDraw(void)
 {
-	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
+	//DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, UtilityCommon::CYAN, true);
 
 	// 各落とし穴位置
 	int textY = 1;
