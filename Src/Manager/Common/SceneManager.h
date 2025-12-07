@@ -24,8 +24,7 @@ public:
 	enum class SCENE_ID
 	{
 		NONE	= 0,
-		TITLE	= 1,
-		GAME	= 2, 
+		GAME	= 1, 
 	};
 
 	/// <summary>

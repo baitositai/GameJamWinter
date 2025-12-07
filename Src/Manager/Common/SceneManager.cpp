@@ -2,7 +2,6 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
 #include "../../Application.h"
-#include "../../Scene/SceneTitle.h"
 #include "../../Scene/SceneGame.h"
 #include "../../Common/Loading.h"
 #include "../Common/ResourceManager.h"
@@ -14,7 +13,7 @@
 void SceneManager::Init()
 {
 	//シーンID初期化
-	sceneId_ = SCENE_ID::TITLE;
+	sceneId_ = SCENE_ID::GAME;
 	waitSceneId_ = SCENE_ID::NONE;
 
 	//フェード
@@ -51,7 +50,7 @@ void SceneManager::Init()
 	Init3D();
 
 	// 初期シーンの設定
-	CreateScene(std::make_shared<SceneTitle>());
+	CreateScene(std::make_shared<SceneGame>());
 }
 
 void SceneManager::Init3D()
@@ -252,9 +251,6 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 	// シーン生成
 	switch (sceneId_)
 	{
-	case SCENE_ID::TITLE:
-		CreateScene(std::make_shared<SceneTitle>());
-		break;
 	case SCENE_ID::GAME:
 		CreateScene(std::make_shared<SceneGame>());
 		break;

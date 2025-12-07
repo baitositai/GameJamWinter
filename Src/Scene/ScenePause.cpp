@@ -28,7 +28,7 @@ ScenePause::ScenePause()
 		{LIST::TITLE,[this]()
 		{
 			// タイトルシーンに戻る
-			scnMng_.ChangeScene(SceneManager::SCENE_ID::TITLE);
+			//scnMng_.ChangeScene(SceneManager::SCENE_ID::TITLE);
 		}},
 		{LIST::GAME_END,[this]()
 		{

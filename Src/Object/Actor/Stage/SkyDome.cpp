@@ -31,8 +31,8 @@ void SkyDome::Draw()
 
 void SkyDome::InitTransform()
 {
-	transform_.scl = INITIAL_SCL;
-	transform_.pos = INITIAL_POS;
+	transform_.scl = INIT_DOME_SCALE;
+	transform_.pos = INIT_DOME_POS;
 	transform_.rot = INITIAL_ROT;
 	transform_.quaRot = Quaternion();
 	transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(DEFAULT_LOCAL_QUAROT_Y_DEG), 0.0f });
