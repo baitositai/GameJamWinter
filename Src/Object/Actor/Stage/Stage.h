@@ -40,4 +40,3 @@ private:
 	// トランスフォームの初期設定
 	void InitTransform() override;
 };
-

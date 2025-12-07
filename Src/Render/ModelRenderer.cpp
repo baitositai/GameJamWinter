@@ -87,6 +87,16 @@ void ModelRenderer::SetReserveVS(void)
 		constBufsPtr->w = constBufs[i].w;
 	}
 
+	// マトリックスの設定
+	const auto& mats = modelMaterial_.GetMatrixs();
+	if (!mats.empty())
+	{
+		for (const auto& mat : mats)
+		{
+			SetVSConstFMtx(mat.first, mat.second);
+		}
+	}
+
 	// 頂点シェーダー用の定数バッファを更新して書き込んだ内容を反映する
 	UpdateShaderConstantBuffer(constBuf);
 

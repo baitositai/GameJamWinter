@@ -6,6 +6,8 @@
 #include "../Utility/UtilityCommon.h"
 #include "../Collider/ColliderBase.h"
 #include "../Collider/ColliderFactory.h"
+#include "../Render/ModelMaterial.h"
+#include "../Render/ModelRenderer.h"
 
 ActorBase::ActorBase() :
 	resMng_(ResourceManager::GetInstance()),

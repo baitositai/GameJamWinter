@@ -2,6 +2,9 @@
 #include <nlohmann/json.hpp>
 #include "../Common/Transform.h"
 
+class ModelMaterial;
+class ModelRenderer;
+
 class ResourceManager;
 class SceneManager;
 class CollisionManager;
@@ -74,6 +77,14 @@ public:
 	void SetIsActive(const bool isActive) { isActive_ = isActive; }
 
 protected:
+
+	// 影用
+	std::unique_ptr<ModelMaterial> shadowMaterial_;
+	std::shared_ptr<ModelRenderer> shadowRenderer_;
+
+	// 描画用
+	std::unique_ptr<ModelMaterial> normalMaterial_;
+	std::unique_ptr<ModelRenderer> normalRenderer_;
 
 	// ローカル回転のデフォルト値(度)
 	static constexpr float DEFAULT_LOCAL_QUAROT_Y_DEG = 180.0f;
