@@ -19,13 +19,13 @@ void Player::Draw(void)
     MV1DrawModel(transform_.modelId);
 }
 
-const std::vector<std::weak_ptr<Pitfall>> Player::GetPitfalls(void)
-{
-    
-}
+//const std::vector<std::weak_ptr<Pitfall>> Player::GetPitfalls(void)
+//{
+//    
+//}
 
-void Player::SetPitfall(const Transform& _transform)
-{
-    Pitfall* pitfall = new Pitfall(_transform);
-    pitfalls_.emplace_back(pitfall);
-}
+//void Player::SetPitfall(const Transform& _transform)
+//{
+//    Pitfall* pitfall = new Pitfall(_transform);
+//    pitfalls_.emplace_back(pitfall);
+//}
