@@ -113,6 +113,9 @@ void SceneGame::NormalDraw(void)
 	// スカイドームの描画
 	skyDome_->Draw();
 
+	// ステージの描画
+	stage_->Draw();
+
 	// 共通描画
 	DrawCommon();
 
@@ -356,7 +359,7 @@ void SceneGame::UpdateTitle()
 		const int playerCnt = title_->GetPlayerNum();
 		for (int i = 0; i < playerCnt; i++)
 		{
-			auto player = std::make_shared<Player>(VECTOR{ -500.0f + 100.0f * i,0,0 }, Input::JOYPAD_NO::PAD1);
+			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1));
 			player->Init();
 			players_.emplace_back(player);
 		}
@@ -483,9 +486,6 @@ void SceneGame::DrawCommon()
 	{
 		return;
 	}
-
-	// ステージの描画
-	stage_->Draw();
 
 	// プレイヤーの描画
 	for (const auto& player : players_)

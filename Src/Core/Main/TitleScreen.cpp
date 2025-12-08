@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "../../Application.h"
+#include "../../Manager/Common/SceneManager.h"
 #include "../../Manager/Common/ResourceManager.h"
 #include "../../Manager/Common/InputManager.h"
 #include "../../Utility/UtilityCommon.h"
@@ -22,21 +23,25 @@ void TitleScreen::Init()
 	auto& res = ResourceManager::GetInstance();
 	imgLogo_.handleId = res.GetHandle("titleLogo");
 	imgLogo_.pos = { Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y };
+	imgLogo_.scale = 0.35f;
 
 	imgPush_.handleId = res.GetHandle("pushSpace");
-	imgPush_.pos = { Application::SCREEN_HALF_X, 500 };
+	imgPush_.pos = { Application::SCREEN_HALF_X, 550 };
 
 	imgSelect_.handleId = res.GetHandle("selectPlayerNum");
 	imgSelect_.pos = { Application::SCREEN_SIZE_X + Application::SCREEN_HALF_X, 120 };
 
 	sprNumbers_.handleIds = res.GetHandles("numbers");
 	sprNumbers_.index = 1;
+	sprNumbers_.scale = 2.0f;
 	sprNumbers_.div = { 5, 2 };
+	sprNumbers_.pos = { Application::SCREEN_SIZE_X + Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y };
 
 	isEnd_ = false;
 	alpha_ = UtilityCommon::ALPHA_MAX;
 	isRev_ = -1;
 	step_ = 0.0f;
+	playerNum_ = 1;
 
 	ChangeState(STATE::MAIN);
 }
@@ -57,10 +62,10 @@ void TitleScreen::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 選択描画
-	imgSelect_.Draw();
+	imgSelect_.DrawRota();
 
 	// 数字画像
-	sprNumbers_.Draw();
+	sprNumbers_.DrawRota();
 }
 
 void TitleScreen::ChangeState(const STATE state)
@@ -113,15 +118,15 @@ void TitleScreen::UpdateUiMove()
 {
 	constexpr float MOVE_TIME = 1.0f;
 
+	step_ += scnMng_.GetDeltaTime();
 
 	// 進行度の計算
-	float t = step_ / 1.0f;
+	float t = step_ / MOVE_TIME;
 
 	// 進行度が終了値を超えている場合
 	if (t >= 1.0f)
 	{
 		t = 1.0f;		// 値を固定
-		isEnd_ = true;	// 終了判定を立てる
 	}
 
 	// イーズアウトでスピードを決定
@@ -143,7 +148,7 @@ void TitleScreen::UpdateUiMove()
 
 void TitleScreen::UpdateNumSelect()
 {
-	constexpr int LIST_MAX = 4;
+	constexpr int LIST_MAX = 5;
 
 	if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_RIGHT))
 	{
@@ -153,9 +158,11 @@ void TitleScreen::UpdateNumSelect()
 	{
 		playerNum_ = UtilityCommon::WrapStepIndex(playerNum_, -1, 1, LIST_MAX);
 	}
-	if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_DECISION))
+	else if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_DECISION))
 	{
 		isEnd_ = true;
 	}
 
+	// インデックスの反映
+	sprNumbers_.index = playerNum_;
 }
