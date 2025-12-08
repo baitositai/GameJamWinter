@@ -1,4 +1,6 @@
 #include "../../../Scene/SceneGame.h"
+#include "../../../Utility/UtilityCommon.h"
+#include "../../../Manager/Common/ResourceManager.h"
 #include "Enemy.h"
 
 namespace
@@ -19,6 +21,9 @@ Enemy::~Enemy()
 
 void Enemy::Init()
 {
+	// モデルリソースの設定
+	transform_.SetModel(resMng_.GetHandle("enemy"));
+
 	// 基底クラスの処理
 	CharacterBase::Init();
 
@@ -26,11 +31,13 @@ void Enemy::Init()
 	if (transform_.pos.x > SceneGame::MOVE_LIMIT_MAX_X)
 	{
 		movePowX_ = -MOVE_SPEED; 
+		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(90.0f), 0.0f });
 		checkGoalMove_ = std::bind(&Enemy::IsGoalByMoveLeft, this);
 	}
 	else
 	{
 		movePowX_ = MOVE_SPEED;
+		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(-90.0f), 0.0f });
 		checkGoalMove_ = std::bind(&Enemy::IsGoalByMoveRight, this);
 	}
 }
@@ -38,6 +45,8 @@ void Enemy::Init()
 void Enemy::Draw()
 {
 	CharacterBase::Draw();
+
+	MV1DrawModel(transform_.modelId);
 }
 
 void Enemy::UpdateAction()

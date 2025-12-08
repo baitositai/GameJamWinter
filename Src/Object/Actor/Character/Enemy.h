@@ -5,6 +5,7 @@ class Enemy : public CharacterBase
 {
 public:
 
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>

@@ -91,6 +91,12 @@
       "sceneId": 0,
       "type": "effect",
       "path": "Data/Effect/PetalFall.efk"
+    },
+    {
+      "key": "enemy",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Enemy/Enemy_Rabbit.mv1"
     }
   ]
 }
