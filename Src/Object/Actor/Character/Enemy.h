@@ -40,6 +40,9 @@ private:
 	// 目的地にたどり着いたか判定
 	std::function<bool()> checkGoalMove_;
 
+	//アニメーション初期化処理
+	void InitAnimation()override;
+
 	// アクションの更新処理
 	void UpdateAction() override;
 

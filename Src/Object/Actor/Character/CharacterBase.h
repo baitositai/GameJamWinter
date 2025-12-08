@@ -4,6 +4,7 @@
 #include "../ActorBase.h"
 
 class ColliderCapsule;
+class AnimationController;
 
 class CharacterBase : public ActorBase
 {
@@ -72,6 +73,9 @@ protected:
 	// コライダー
 	std::shared_ptr<ColliderCapsule> collider_;
 
+	//アニメーション
+	std::shared_ptr<AnimationController> anim_;
+
 	// 状態
 	STATE state_;
 
@@ -90,6 +94,9 @@ protected:
 	void UpdateNone() {};
 	virtual void UpdateAction();
 	virtual void UpdateFall();
+
+	//アニメーション初期化処理
+	virtual void InitAnimation(){}
 
 	// トランスフォームの初期化処理
 	void InitTransform() override;

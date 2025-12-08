@@ -1,6 +1,7 @@
 #include "../../../Scene/SceneGame.h"
 #include "../../../Utility/UtilityCommon.h"
 #include "../../../Manager/Common/ResourceManager.h"
+#include "../../Common/AnimationController.h"
 #include "Enemy.h"
 
 namespace
@@ -47,6 +48,10 @@ void Enemy::Draw()
 	CharacterBase::Draw();
 
 	MV1DrawModel(transform_.modelId);
+}
+
+void Enemy::InitAnimation()
+{
 }
 
 void Enemy::UpdateAction()

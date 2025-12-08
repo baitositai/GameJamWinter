@@ -1,5 +1,6 @@
 #include "../../../Utility/UtilityCommon.h"
 #include "../../Collider/ColliderCapsule.h"
+#include "../../Common/AnimationController.h"
 #include "CharacterBase.h"
 
 CharacterBase::CharacterBase(const VECTOR& initPos) :
@@ -19,6 +20,8 @@ void CharacterBase::Init()
 {
 	ActorBase::Init();
 
+	InitAnimation();
+
 	ChangeState(STATE::ACTION);
 }
 
@@ -28,6 +31,8 @@ void CharacterBase::Update()
 
 	// トランスフォームの更新
 	transform_.Update();
+
+	anim_->Update();
 }
 
 void CharacterBase::Draw()

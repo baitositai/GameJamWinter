@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Common\AnimationController.cpp" />
     <ClCompile Include="Src\Object\Common\ControllerCamera.cpp" />
     <ClCompile Include="Src\Core\Main\Score.cpp" />
     <ClCompile Include="Src\Object\Actor\Character\Enemy.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="Src\Object\Actor\Stage\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Common\AnimationController.h" />
     <ClInclude Include="Src\Object\Common\ControllerCamera.h" />
     <ClInclude Include="Src\Core\Main\Score.h" />
     <ClInclude Include="Src\Object\Actor\Character\Enemy.h" />
