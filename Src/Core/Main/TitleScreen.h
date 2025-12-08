@@ -2,6 +2,7 @@
 #include <functional>
 #include "../CoreBase.h"
 #include "../../Common/Image.h"
+#include "../../Common/Sprite.h"
 
 class InputManager;
 
@@ -24,15 +25,23 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	const int GetPlayerNum() const { return playerNum_; }
+
 private:
 
 	InputManager& inputMng_;
 
+	float step_;
+
+	int playerNum_;
 	int isRev_;
 	float alpha_;
+	bool isEnd_;
 
 	Image imgLogo_;
 	Image imgPush_;
+	Sprite sprNumbers_;
+	Image imgSelect_;
 
 	STATE state_;
 
