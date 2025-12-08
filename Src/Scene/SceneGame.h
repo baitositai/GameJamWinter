@@ -30,12 +30,12 @@ public:
 	enum class STATE
 	{
 		TITLE,					// タイトル
-		CAMERA_ROLL_TO_GAME,	// カメラを下げる(ゲーム画面を見せる)
+		CAMERA_ROLL_TO_DOWN,	// カメラを下げる(ゲーム画面を見せる)
 		READY,					// 準備(カウントダウン)
 		MAIN,					// 本編
 		END,					// 終了(画面はそのままで終了用のUIを表示)
 		RESULT,					// リザルト画面の表示	
-		CAMERA_ROLL_TO_TITLE,	// カメラを上げる(タイトル画面用の視点へ戻る)
+		CAMERA_ROLL_TO_UP,	// カメラを上げる(タイトル画面用の視点へ戻る)
 	};
 
 	/// <summary>

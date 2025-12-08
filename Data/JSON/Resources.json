@@ -57,10 +57,39 @@
       "soundType": "se"
     },
     {
-      "key": "pushSpace",
+      "key": "seDecision",
       "sceneId": 0,
-      "type": "texture",
-      "path": "Data/Image/PushSpace.png"
+      "type": "sound",
+      "path": "Data/Sound/SE/SeDecision.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seCheers",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeCheers.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seFinish",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeFinish.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seGameStart",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeGameStart.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seWhistle",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeWhistle.mp3",
+      "soundType": "se"
     },
     {
       "key": "seFall",
@@ -69,12 +98,17 @@
       "path": "Data/Sound/SE/SeFall.mp3",
       "soundType": "se"
     },
-
     {
       "key": "titleLogo",
       "sceneId": 0,
       "type": "texture",
       "path": "Data/Image/TitleLogo.png"
+    },
+    {
+      "key": "pushSpace",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/PushSpace.png"
     },
     {
       "key": "numbers",

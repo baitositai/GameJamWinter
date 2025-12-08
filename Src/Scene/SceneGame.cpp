@@ -36,12 +36,12 @@ SceneGame::SceneGame()
 
 	// 状態遷移処理
 	changeStateMap_.emplace(STATE::TITLE, std::bind(&SceneGame::ChangeStateTitle, this));
-	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_GAME, std::bind(&SceneGame::ChangeStateCameraRollDown, this));
+	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_DOWN, std::bind(&SceneGame::ChangeStateCameraRollDown, this));
 	changeStateMap_.emplace(STATE::READY, std::bind(&SceneGame::ChangeStateReady, this));
 	changeStateMap_.emplace(STATE::MAIN, std::bind(&SceneGame::ChangeStateMain, this));
 	changeStateMap_.emplace(STATE::END, std::bind(&SceneGame::ChangeStateEnd, this));
 	changeStateMap_.emplace(STATE::RESULT, std::bind(&SceneGame::ChangeStateResult, this));
-	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_TITLE, std::bind(&SceneGame::ChangeStateCameraRollUp, this));
+	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_UP, std::bind(&SceneGame::ChangeStateCameraRollUp, this));
 }
 
 SceneGame::~SceneGame()
@@ -85,9 +85,6 @@ void SceneGame::Init(void)
 	// タイトル
 	title_ = std::make_unique<TitleScreen>();
 	title_->Init();
-
-	// BGMの再生
-	sndMng_.PlayBgm(SoundType::BGM::GAME);
 
 	// カメラを固定
 	mainCamera.ChangeMode(Camera::MODE::FIXED_POINT);
@@ -303,6 +300,9 @@ void SceneGame::ChangeStateTitle()
 	update_ = std::bind(&SceneGame::UpdateTitle, this);
 
 	draw_ = std::bind(&SceneGame::DrawTitle, this);
+
+	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
+	sndMng_.PlayBgm(SoundType::BGM::TITLE);
 }
 
 void SceneGame::ChangeStateCameraRollDown()
@@ -312,6 +312,9 @@ void SceneGame::ChangeStateCameraRollDown()
 	draw_ = std::bind(&SceneGame::DrawNone, this);
 
 	camera_->Set(FIX_CAMERA_POS, FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
+
+	sndMng_.PlaySe(SoundType::SE::CHEERS);
+	sndMng_.StopBgm(SoundType::BGM::TITLE);
 }
 
 void SceneGame::ChangeStateReady()
@@ -319,6 +322,9 @@ void SceneGame::ChangeStateReady()
 	update_ = std::bind(&SceneGame::UpdateReady, this);
 
 	draw_ = std::bind(&SceneGame::DrawReady, this);
+
+	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
+	sndMng_.PlayBgm(SoundType::BGM::GAME);
 }
 
 void SceneGame::ChangeStateMain()
@@ -351,6 +357,9 @@ void SceneGame::ChangeStateCameraRollUp()
 	Reset();
 	
 	camera_->Set(TITLE_FIX_CAMERA_POS, TITLE_FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
+
+	sndMng_.PlaySe(SoundType::SE::CHEERS);
+	sndMng_.StopBgm(SoundType::BGM::GAME);
 }
 
 void SceneGame::UpdateTitle()
@@ -369,7 +378,12 @@ void SceneGame::UpdateTitle()
 		}
 
 		// 状態遷移
-		ChangeState(STATE::CAMERA_ROLL_TO_GAME);
+		ChangeState(STATE::CAMERA_ROLL_TO_DOWN);
+	}
+
+	if (!sndMng_.IsPlay(SoundType::BGM::TITLE))
+	{
+		return;
 	}
 }
 
@@ -377,7 +391,7 @@ void SceneGame::UpdateCameraRollDown()
 {	
 	if(camera_->IsEnd())
 	{
-		ChangeState(STATE::MAIN);
+		ChangeState(STATE::READY);
 	}
 	else
 	{
@@ -441,7 +455,7 @@ void SceneGame::UpdateMain()
 	// ゲーム終了
 	if (gameTimer_->CountUp())
 	{
-		ChangeState(STATE::CAMERA_ROLL_TO_TITLE);
+		ChangeState(STATE::CAMERA_ROLL_TO_UP);
 	}
 
 #ifdef _DEBUG	

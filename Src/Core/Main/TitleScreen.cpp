@@ -3,6 +3,7 @@
 #include "../../Manager/Common/SceneManager.h"
 #include "../../Manager/Common/ResourceManager.h"
 #include "../../Manager/Common/InputManager.h"
+#include "../../Manager/Common/SoundManager.h"
 #include "../../Utility/UtilityCommon.h"
 #include "TitleScreen.h"
 
@@ -82,7 +83,7 @@ void TitleScreen::ChangeStateMain()
 
 void TitleScreen::ChangeStateUiMove()
 {
-	update_ = std::bind(&TitleScreen::UpdateUiMove, this);
+	update_ = std::bind(&TitleScreen::UpdateUiMove, this);	
 }
 
 void TitleScreen::ChangeStateNumSelect()
@@ -92,7 +93,7 @@ void TitleScreen::ChangeStateNumSelect()
 
 void TitleScreen::UpdateMainScreen()
 {
-	constexpr float ALPHA_SPEED = 0.5f;
+	constexpr float ALPHA_SPEED = 10.0f;
 
 	// アルファ値の更新
 	alpha_ += ALPHA_SPEED * isRev_;
@@ -110,6 +111,7 @@ void TitleScreen::UpdateMainScreen()
 	
 	if (inputMng_.IsTrgDown(InputManager::TYPE::GAME_STATE_CHANGE))
 	{
+		sndMng_.PlaySe(SoundType::SE::DECISION);
 		ChangeState(STATE::UI_MOVE);
 	}
 }
@@ -152,14 +154,17 @@ void TitleScreen::UpdateNumSelect()
 
 	if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_RIGHT))
 	{
+		sndMng_.PlaySe(SoundType::SE::SELECT);
 		playerNum_ = UtilityCommon::WrapStepIndex(playerNum_, 1, 1, LIST_MAX);
 	}
 	else if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_LEFT))
 	{
+		sndMng_.PlaySe(SoundType::SE::SELECT);
 		playerNum_ = UtilityCommon::WrapStepIndex(playerNum_, -1, 1, LIST_MAX);
 	}
 	else if (inputMng_.IsTrgDown(InputManager::TYPE::SELECT_DECISION))
 	{
+		sndMng_.PlaySe(SoundType::SE::DECISION);
 		isEnd_ = true;
 	}
 

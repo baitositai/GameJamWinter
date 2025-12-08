@@ -28,6 +28,10 @@ public:
 		SELECT,
 		DECISION,
 		FALL,
+		CHEERS,
+		FINISH,
+		GAME_START,
+		WHISTLE,
 		MAX
 	};
 
