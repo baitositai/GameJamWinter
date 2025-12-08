@@ -8,9 +8,9 @@
 TitleScreen::TitleScreen() :
 	 inputMng_(InputManager::GetInstance())
 {
-	changeStateMap_.emplace(STATE::MAIN, std::bind(&TitleScreen::UpdateMain, this));
-	changeStateMap_.emplace(STATE::UI_MOVE, std::bind(&TitleScreen::UpdateUiMove, this));
-	changeStateMap_.emplace(STATE::NUM_SELECT, std::bind(&TitleScreen::UpdateNumSelect, this));
+	changeStateMap_.emplace(STATE::MAIN, std::bind(&TitleScreen::ChangeStateMain, this));
+	changeStateMap_.emplace(STATE::UI_MOVE, std::bind(&TitleScreen::ChangeStateUiMove, this));
+	changeStateMap_.emplace(STATE::NUM_SELECT, std::bind(&TitleScreen::ChangeStateNumSelect, this));
 }
 
 TitleScreen::~TitleScreen()
@@ -37,6 +37,8 @@ void TitleScreen::Init()
 	alpha_ = UtilityCommon::ALPHA_MAX;
 	isRev_ = -1;
 	step_ = 0.0f;
+
+	ChangeState(STATE::MAIN);
 }
 
 void TitleScreen::Update()
@@ -70,7 +72,7 @@ void TitleScreen::ChangeState(const STATE state)
 
 void TitleScreen::ChangeStateMain()
 {
-	update_ = std::bind(&TitleScreen::UpdateMain, this);
+	update_ = std::bind(&TitleScreen::UpdateMainScreen, this);
 }
 
 void TitleScreen::ChangeStateUiMove()
@@ -83,7 +85,7 @@ void TitleScreen::ChangeStateNumSelect()
 	update_ = std::bind(&TitleScreen::UpdateNumSelect, this);
 }
 
-void TitleScreen::UpdateMain()
+void TitleScreen::UpdateMainScreen()
 {
 	constexpr float ALPHA_SPEED = 0.5f;
 
@@ -103,7 +105,7 @@ void TitleScreen::UpdateMain()
 	
 	if (inputMng_.IsTrgDown(InputManager::TYPE::GAME_STATE_CHANGE))
 	{
-		ChangeState(STATE::MAIN);
+		ChangeState(STATE::UI_MOVE);
 	}
 }
 

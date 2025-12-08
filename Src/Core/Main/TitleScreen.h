@@ -27,6 +27,8 @@ public:
 
 	const int GetPlayerNum() const { return playerNum_; }
 
+	const bool IsEnd() const { return isEnd_; }
+
 private:
 
 	InputManager& inputMng_;
@@ -54,7 +56,7 @@ private:
 	void ChangeStateUiMove();
 	void ChangeStateNumSelect();
 
-	void UpdateMain();
+	void UpdateMainScreen();
 	void UpdateUiMove();
 	void UpdateNumSelect();
 };
