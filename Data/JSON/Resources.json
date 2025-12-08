@@ -63,6 +63,14 @@
       "path": "Data/Image/PushSpace.png"
     },
     {
+      "key": "seFall",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeFall.mp3",
+      "soundType": "se"
+    },
+
+    {
       "key": "titleLogo",
       "sceneId": 0,
       "type": "texture",
