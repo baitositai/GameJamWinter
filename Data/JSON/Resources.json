@@ -39,7 +39,7 @@
       "key": "bgmGame",
       "sceneId": 0,
       "type": "sound",
-      "path": "Data/Sound/BGM/BgmGame.mp3",
+      "path": "Data/Sound/BGM/BgmGame.wav",
       "soundType": "bgm"
     },
     {
