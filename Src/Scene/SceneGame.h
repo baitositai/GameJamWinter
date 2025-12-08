@@ -15,6 +15,7 @@ class ControllerEffect;
 class ControllerCamera;
 class Timer;
 class Score;
+class TitleScreen;
 
 class SceneGame : public SceneBase
 {
@@ -112,8 +113,14 @@ private:
 	// スコア
 	std::unique_ptr<Score> score_;
 
+	// タイトル
+	std::unique_ptr<TitleScreen> title_;
+
 	// 状態別更新処理
 	std::function<void()> update_;
+
+	// 状態別描画処理
+	std::function<void()> draw_;
 
 	// 状態遷移管理
 	std::unordered_map<STATE, std::function<void()>> changeStateMap_;
@@ -157,6 +164,17 @@ private:
 	void UpdateEnd();
 	void UpdateResult();
 	void UpdateCameraRollUp();
+
+	// 描画処理
+	void DrawNone() {};
+	void DrawTitle();
+	void DrawReady();
+	void DrawMain();
+	void DrawEnd();
+	void DrawResult();
+
+	// 共通描画
+	void DrawCommon();
 
 	//デバッグ処理
 	void DebugUpdate();

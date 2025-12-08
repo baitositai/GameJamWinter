@@ -19,6 +19,7 @@
 #include "../Object/Enviroment/Shadow.h"
 #include "../Core/Common/Timer.h"
 #include "../Core/Main/Score.h"
+#include "../Core/Main/TitleScreen.h"
 #include "../Utility/UtilityCommon.h"
 #include "../Utility/Utility3D.h"
 #include "ScenePause.h"
@@ -81,6 +82,10 @@ void SceneGame::Init(void)
 	score_ = std::make_unique<Score>();
 	score_->Init();
 
+	// タイトル
+	title_ = std::make_unique<TitleScreen>();
+	title_->Init();
+
 	// BGMの再生
 	sndMng_.PlayBgm(SoundType::BGM::GAME);
 
@@ -91,7 +96,7 @@ void SceneGame::Init(void)
 	mainCamera.SetAngles(TITLE_FIX_CAMERA_ANGLES);
 
 	// 再生
-	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), Utility3D::VECTOR_ZERO, 1.0f);
+	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), { 100.0f, 100.0f, 100.0f}, 1.0f);
 
 	// 初期状態設定
 	ChangeState(STATE::TITLE);
@@ -112,17 +117,11 @@ void SceneGame::NormalDraw(void)
 	// ステージの描画
 	stage_->Draw();
 
-	// プレイヤーの描画
-	for (const auto& player : players_)
-	{
-		player->Draw();
-	}
+	// 共通描画
+	DrawCommon();
 
-	// 敵の描画
-	for (const auto& enemy : enemies_)
-	{
-		enemy->Draw();
-	}
+	// 状態別UI描画
+	draw_();
 
 #ifdef _DEBUG
 
@@ -286,6 +285,7 @@ void SceneGame::Reset()
 	score_->Init();
 	gameTimer_->InitCountUp();
 	enemyCreateTimer_->InitCountUp();
+	title_->Init();
 }
 
 void SceneGame::ChangeState(const STATE state)
@@ -298,11 +298,15 @@ void SceneGame::ChangeState(const STATE state)
 void SceneGame::ChangeStateTitle()
 {
 	update_ = std::bind(&SceneGame::UpdateTitle, this);
+
+	draw_ = std::bind(&SceneGame::DrawTitle, this);
 }
 
 void SceneGame::ChangeStateCameraRollDown()
 {
 	update_ = std::bind(&SceneGame::UpdateCameraRollDown, this);
+
+	draw_ = std::bind(&SceneGame::DrawNone, this);
 
 	camera_->Set(FIX_CAMERA_POS, FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
 }
@@ -310,26 +314,36 @@ void SceneGame::ChangeStateCameraRollDown()
 void SceneGame::ChangeStateReady()
 {
 	update_ = std::bind(&SceneGame::UpdateReady, this);
+
+	draw_ = std::bind(&SceneGame::DrawReady, this);
 }
 
 void SceneGame::ChangeStateMain()
 {
 	update_ = std::bind(&SceneGame::UpdateMain, this);
+
+	draw_ = std::bind(&SceneGame::DrawMain, this);
 }
 
 void SceneGame::ChangeStateEnd()
 {
 	update_ = std::bind(&SceneGame::UpdateEnd, this);
+
+	draw_ = std::bind(&SceneGame::DrawEnd, this);
 }
 
 void SceneGame::ChangeStateResult()
 {
 	update_ = std::bind(&SceneGame::UpdateResult, this);
+
+	draw_ = std::bind(&SceneGame::DrawResult, this);
 }
 
 void SceneGame::ChangeStateCameraRollUp()
 {
 	update_ = std::bind(&SceneGame::UpdateCameraRollUp, this);
+
+	draw_ = std::bind(&SceneGame::DrawNone, this);
 	
 	Reset();
 	
@@ -338,14 +352,15 @@ void SceneGame::ChangeStateCameraRollUp()
 
 void SceneGame::UpdateTitle()
 {
-	// ゲーム開始
-	if (inputMng_.IsTrgDown(InputManager::TYPE::GAME_STATE_CHANGE))
+	title_->Update();
+
+	if (title_->IsEnd())
 	{
 		// プレイヤー生成
-		const int playerCnt = 1;
+		const int playerCnt = title_->GetPlayerNum();
 		for (int i = 0; i < playerCnt; i++)
 		{
-			auto player = std::make_shared<Player>(VECTOR{ 0,0,0 }, Input::JOYPAD_NO::PAD1);
+			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1));
 			player->Init();
 			players_.emplace_back(player);
 		}
@@ -443,6 +458,48 @@ void SceneGame::UpdateCameraRollUp()
 	else
 	{
 		camera_->Update();
+	}
+}
+
+void SceneGame::DrawTitle()
+{
+	title_->Draw();
+}
+
+void SceneGame::DrawReady()
+{
+}
+
+void SceneGame::DrawMain()
+{
+}
+
+void SceneGame::DrawEnd()
+{
+}
+
+void SceneGame::DrawResult()
+{
+}
+
+void SceneGame::DrawCommon()
+{
+	// タイトルのみ非表示
+	if (STATE::TITLE == state_)
+	{
+		return;
+	}
+
+	// プレイヤーの描画
+	for (const auto& player : players_)
+	{
+		player->Draw();
+	}
+
+	// 敵の描画
+	for (const auto& enemy : enemies_)
+	{
+		enemy->Draw();
 	}
 }
 
