@@ -38,7 +38,7 @@ void Enemy::Init()
 	else
 	{
 		movePowX_ = MOVE_SPEED;
-		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(-90.0f), 0.0f });
+		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(90.0f), 0.0f });
 		checkGoalMove_ = std::bind(&Enemy::IsGoalByMoveRight, this);
 	}
 }
