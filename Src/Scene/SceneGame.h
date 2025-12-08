@@ -77,6 +77,7 @@ private:
 
 	// エフェクトの制御
 	std::unique_ptr<ControllerEffect> effect_;
+	std::unique_ptr<ControllerEffect> effectFall_;
 
 	// カメラ制御
 	std::unique_ptr<ControllerCamera> camera_;
