@@ -90,7 +90,7 @@ void SceneGame::Init(void)
 	mainCamera.SetAngles(TITLE_FIX_CAMERA_ANGLES);
 
 	// Ä¶
-	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), Utility3D::VECTOR_ZERO, 1.0f);
+	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), { 100.0f, 100.0f, 100.0f}, 1.0f);
 
 	// ‰Šúó‘Ôİ’è
 	ChangeState(STATE::TITLE);

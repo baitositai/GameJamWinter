@@ -97,6 +97,7 @@
     <ClCompile Include="Src\Core\Common\Timer.cpp" />
     <ClCompile Include="Src\Common\Image.cpp" />
     <ClCompile Include="Src\Object\Actor\Stage\Stage.cpp" />
+    <ClCompile Include="Src\Core\Main\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Object\Common\ControllerCamera.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Src\Core\Common\Timer.h" />
     <ClInclude Include="Src\Common\Image.h" />
     <ClInclude Include="Src\Object\Actor\Stage\Stage.h" />
+    <ClInclude Include="Src\Core\Main\TitleScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shader\Model\EnemyPS.hlsl">
