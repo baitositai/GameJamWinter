@@ -57,6 +57,13 @@
       "soundType": "se"
     },
     {
+      "key": "seFall",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeFall.mp3",
+      "soundType": "se"
+    },
+    {
       "key": "cracksEffect",
       "sceneId": 1,
       "type": "pixelShader",

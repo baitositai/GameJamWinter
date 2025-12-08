@@ -269,6 +269,9 @@ void SceneGame::Collision()
 				// プレイヤーの状態遷移
 				player->ChangeState(Player::STATE::FALL);
 
+				// SE再生
+				//sndMng_.PlaySe(SoundType::SE::FALL);
+
 				// 次のプレイヤーへ
 				break;
 			}
@@ -394,10 +397,17 @@ void SceneGame::UpdateMain()
 		// 削除判定がある場合
 		if (enemies_[i]->IsDelete())
 		{
+			// 落下エフェクト
+			const float SCALE = 17.5f;
+			VECTOR pos = enemies_[i]->GetTransform().pos;
+			if (pos.y < 0.0f)
+			{
+				pos.y = 0.0f;
+				effectFall_->Play(pos, Quaternion::Identity(), { SCALE, SCALE, SCALE }, 1.0f, false);
+			}
+
 			// 敵削除
 			enemies_.erase(enemies_.begin() + i);
-			const float SCALE = 3.0f;
-			effectFall_->Play( enemies_[i]->GetTransform().pos, Quaternion::Identity(), {SCALE, SCALE, SCALE}, 1.0f, false);
 		}
 	}
 

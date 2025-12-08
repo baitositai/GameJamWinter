@@ -13,6 +13,7 @@ ResourceEffect::~ResourceEffect()
 void ResourceEffect::Load()
 {
 	LoadEffekseerEffect(path_.c_str());
+	handleId_ = LoadEffekseerEffect(path_.c_str());
 }
 
 void ResourceEffect::Release()

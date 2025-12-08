@@ -27,6 +27,7 @@ public:
 	{
 		SELECT,
 		DECISION,
+		FALL,
 		MAX
 	};
 
