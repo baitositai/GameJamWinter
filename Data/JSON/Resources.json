@@ -37,7 +37,7 @@
     },
     {
       "key": "bgmGame",
-      "sceneId": 2,
+      "sceneId": 1,
       "type": "sound",
       "path": "Data/Sound/BGM/BgmGame.mp3",
       "soundType": "bgm"
@@ -73,6 +73,24 @@
       "sceneId": 1,
       "type": "texture",
       "path": "Data/Image/TitleImage.jpg"
+    },
+    {
+      "key": "stage",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Stage/Stage.mv1"
+    },
+    {
+      "key": "skyDome",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/SkyDome/SkyDome.mv1"
+    },
+    {
+      "key": "petalFall",
+      "sceneId": 0,
+      "type": "effect",
+      "path": "Data/Effect/PetalFall.efk"
     }
   ]
 }

@@ -61,6 +61,12 @@ public:
 	// テクスチャアドレスを設定
 	void SetTextureAddress(TEXADDRESS texA);
 
+	// マトリックスを返す
+	const std::map<int, MATRIX>& GetMatrixs() const;
+
+	// マトリックスの設定
+	void SetConstMtx(const int idx, const MATRIX& mat);
+
 private:
 
 	// 頂点シェーダ
@@ -92,5 +98,8 @@ private:
 
 	// 画像
 	std::map<int, int> textures_;
+
+	// マトリックス
+	std::map<int, MATRIX> matrixs_;
 
 };

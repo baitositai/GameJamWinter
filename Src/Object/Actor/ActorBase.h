@@ -2,6 +2,9 @@
 #include <nlohmann/json.hpp>
 #include "../Common/Transform.h"
 
+class ModelMaterial;
+class ModelRenderer;
+
 class ResourceManager;
 class SceneManager;
 class CollisionManager;
@@ -21,12 +24,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~ActorBase();
-
-	/// <summary>
-	/// 読み込み
-	/// </summary>
-	virtual void Load();
+	virtual ~ActorBase();
 
 	/// <summary>
 	/// 初期化
@@ -80,6 +78,19 @@ public:
 
 protected:
 
+	// トランスフォーム初期化情報
+	static constexpr VECTOR INITIAL_POS = { 0.0f,0.0f,0.0f };
+	static constexpr VECTOR INITIAL_SCL = { 1.0f,1.0f,1.0f };
+	static constexpr VECTOR INITIAL_ROT = { 0.0f,0.0f,0.0f };
+
+	// 影用
+	std::unique_ptr<ModelMaterial> shadowMaterial_;
+	std::shared_ptr<ModelRenderer> shadowRenderer_;
+
+	// 描画用
+	std::unique_ptr<ModelMaterial> normalMaterial_;
+	std::unique_ptr<ModelRenderer> normalRenderer_;
+
 	// ローカル回転のデフォルト値(度)
 	static constexpr float DEFAULT_LOCAL_QUAROT_Y_DEG = 180.0f;
 
@@ -104,6 +115,9 @@ protected:
 	// トランスフォームの初期設定
 	virtual void InitTransform();
 
+	// コライダーの初期化
+	virtual void InitCollider();
+
 	// メインの更新処理
 	virtual void UpdateBody();
 
@@ -118,9 +132,6 @@ protected:
 
 	// UIの描画
 	virtual void DrawUI();
-
-	// コライダーの追加
-	virtual void AddCollider();
 
 	// デバッグ時の更新
 	virtual void DebugUpdate();

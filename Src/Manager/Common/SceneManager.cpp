@@ -2,7 +2,6 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
 #include "../../Application.h"
-#include "../../Scene/SceneTitle.h"
 #include "../../Scene/SceneGame.h"
 #include "../../Common/Loading.h"
 #include "../Common/ResourceManager.h"
@@ -14,7 +13,7 @@
 void SceneManager::Init()
 {
 	//シーンID初期化
-	sceneId_ = SCENE_ID::TITLE;
+	sceneId_ = SCENE_ID::GAME;
 	waitSceneId_ = SCENE_ID::NONE;
 
 	//フェード
@@ -51,7 +50,7 @@ void SceneManager::Init()
 	Init3D();
 
 	// 初期シーンの設定
-	CreateScene(std::make_shared<SceneTitle>());
+	CreateScene(std::make_shared<SceneGame>());
 }
 
 void SceneManager::Init3D()
@@ -72,15 +71,18 @@ void SceneManager::Init3D()
 	SetUseLighting(true);
 	
 	//標準ライトの計算を行わない
-	SetLightEnable(false);
+	SetLightEnable(true);
 
 	// ライトの設定
 	ChangeLightTypeDir({ 0.2f, -1.0f, 0.2f });
 
+	// ライトの方向を設定
+	SetLightDirection(VGet(0.5f, -0.5f, 0.5f));
+
 	// フォグ設定
-	SetFogEnable(true);
-	SetFogColor(5, 5, 5);
-	SetFogStartEnd(100.0f, 500.0f);
+	//SetFogEnable(true);
+	//SetFogColor(5, 5, 5);
+	//SetFogStartEnd(100.0f, 500.0f);
 }
 
 void SceneManager::Update()
@@ -249,9 +251,6 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 	// シーン生成
 	switch (sceneId_)
 	{
-	case SCENE_ID::TITLE:
-		CreateScene(std::make_shared<SceneTitle>());
-		break;
 	case SCENE_ID::GAME:
 		CreateScene(std::make_shared<SceneGame>());
 		break;

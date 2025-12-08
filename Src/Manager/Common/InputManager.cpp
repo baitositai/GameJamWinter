@@ -17,8 +17,7 @@ void InputManager::Init()
 	RegisterTrigger(TYPE::PLAYER_MOVE_LEFT, { KEY_INPUT_A }, { }, STICK::L_STICK_LEFT);
 	RegisterTrigger(TYPE::PLAYER_MOVE_UP, { KEY_INPUT_W }, { }, STICK::L_STICK_UP);
 	RegisterTrigger(TYPE::PLAYER_MOVE_DOWN, { KEY_INPUT_S }, { }, STICK::L_STICK_DOWN);
-	RegisterTrigger(TYPE::PLAYER_JUMP, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT });
-	RegisterTrigger(TYPE::PLAYER_DASH, { KEY_INPUT_LSHIFT }, { BTN::RB_DOWN });
+	RegisterTrigger(TYPE::PLAYER_CREATE_PIT_FALL, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT });
 
 	RegisterTrigger(TYPE::CAMERA_MOVE_RIGHT, { KEY_INPUT_RIGHT }, { }, STICK::R_STICK_RIGHT, MOUSE::MOVE_RIGHT);
 	RegisterTrigger(TYPE::CAMERA_MOVE_LEFT, { KEY_INPUT_LEFT }, { }, STICK::R_STICK_LEFT, MOUSE::MOVE_LEFT);
@@ -33,6 +32,9 @@ void InputManager::Init()
 	RegisterTrigger(TYPE::SELECT_DECISION, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT }, STICK::MAX, MOUSE::CLICK_LEFT);
 	RegisterTrigger(TYPE::SELECT_CANCEL, { KEY_INPUT_BACK }, { BTN::RB_DOWN });
 	RegisterTrigger(TYPE::PAUSE, { KEY_INPUT_BACK }, { BTN::SELECT });
+
+	// ÉQÅ[ÉÄèÛë‘ëJà⁄
+	RegisterTrigger(TYPE::GAME_STATE_CHANGE, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT });
 
 	RegisterTrigger(TYPE::DEBUG_SCENE_CHANGE, { KEY_INPUT_RSHIFT }, { });
 }

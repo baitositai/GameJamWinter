@@ -24,13 +24,14 @@ public:
 		PLAYER_MOVE_LEFT,		// 移動左
 		PLAYER_MOVE_UP,			// 移動上
 		PLAYER_MOVE_DOWN,		// 移動下
-		PLAYER_JUMP,			// ジャンプ
-		PLAYER_DASH,			// ダッシュ
+		PLAYER_CREATE_PIT_FALL,	// 落とし穴を生成
 
 		CAMERA_MOVE_RIGHT,		// カメラ右移動
 		CAMERA_MOVE_LEFT,		// カメラ左移動
 		CAMERA_MOVE_UP,			// カメラ上移動
 		CAMERA_MOVE_DOWN,		// カメラ下移動
+
+		GAME_STATE_CHANGE,		// ゲーム状態遷移
 
 		SELECT_RIGHT,			// 選択右
 		SELECT_LEFT,			// 選択左
