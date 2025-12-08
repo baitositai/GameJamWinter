@@ -71,6 +71,7 @@ void SceneGame::Init(void)
 
 	// エフェクト制御
 	effect_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("petalFall"));
+	effectFall_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("Fall"));
 
 	// カメラ制御
 	camera_ = std::make_unique<ControllerCamera>();
@@ -395,6 +396,8 @@ void SceneGame::UpdateMain()
 		{
 			// 敵削除
 			enemies_.erase(enemies_.begin() + i);
+			const float SCALE = 3.0f;
+			effectFall_->Play( enemies_[i]->GetTransform().pos, Quaternion::Identity(), {SCALE, SCALE, SCALE}, 1.0f, false);
 		}
 	}
 
