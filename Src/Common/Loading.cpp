@@ -16,12 +16,12 @@ void Loading::Init()
 	//SoundManager::GetInstance().SceneChangeResources();
 
 	//ローディング用文字列設定
-	const std::wstring& fontName = ResourceManager::GetInstance().GetFontName("fontKazuki");
+	const std::wstring& fontName = ResourceManager::GetInstance().GetFontName("fontHanazome");
 	constexpr int FONT_SIZE = 32;
 	loadingString_.fontHandle = FontManager::GetInstance().CreateMyFont(fontName, FONT_SIZE, 0);
-	loadingString_.color = UtilityCommon::RED;
+	loadingString_.color = UtilityCommon::BLACK;
 	loadingString_.pos = { LOADING_STRING_POS_X, LOADING_STRING_POS_Y };
-	loadingString_.string = L"Now loading";
+	loadingString_.string = L"読み込んでま～す";
 }
 
 void Loading::Update()
@@ -60,12 +60,14 @@ void Loading::StartASyncLoad()
 
 void Loading::DrawNowLoading(void)
 {
+	DrawBox(0, 0, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, 0xffffff, true);
+
 	//ロード中
 	auto time = SceneManager::GetInstance().GetTotalTime();
 	int count = static_cast<int>(time / COMMA_TIME);
 	count %= COMMA_MAX_NUM;
 
-	loadingString_.string = L"Now Loading";
+	loadingString_.string = L"読み込んでま～す";
 	std::wstring dotStr = L".";
 
 	//テキストの設定

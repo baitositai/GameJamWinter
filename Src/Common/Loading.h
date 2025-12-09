@@ -48,7 +48,7 @@ private:
 	//ローディング
 	static constexpr int COMMA_MAX_NUM = 7;											//「now loading......」のコンマの数
 	static constexpr float COMMA_TIME = 0.5f;										//「now loading......」のコンマ数を増やす時間
-	static constexpr int LOADING_STRING_POS_X = Application::SCREEN_SIZE_X - 300;	//「now loading......」の座標X
+	static constexpr int LOADING_STRING_POS_X = Application::SCREEN_SIZE_X - 400;	//「now loading......」の座標X
 	static constexpr int LOADING_STRING_POS_Y = Application::SCREEN_SIZE_Y - 40;	//「now loading......」の座標Y
 
 	// ローディング経過時間
