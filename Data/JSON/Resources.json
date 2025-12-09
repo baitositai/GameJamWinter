@@ -97,6 +97,12 @@
       "sceneId": 0,
       "type": "model",
       "path": "Data/Model/Enemy/Enemy_Rabbit.mv1"
+    },
+    {
+      "key": "player",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Player/Player_Panda.mv1"
     }
   ]
 }

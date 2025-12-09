@@ -38,6 +38,8 @@ void CharacterBase::Update()
 void CharacterBase::Draw()
 {
 	ActorBase::Draw();
+
+	MV1DrawModel(transform_.modelId);
 }
 
 void CharacterBase::ChangeState(const STATE state)

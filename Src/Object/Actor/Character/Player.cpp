@@ -4,6 +4,8 @@
 #include "../../../Utility/UtilityCommon.h"
 #include "../../../Scene/SceneGame.h"
 #include "../../../Core/Common/Timer.h"
+#include "../../../Manager/Common/ResourceManager.h"
+#include "../../Common/AnimationController.h"
 #include "Player.h"
 
 Player::Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo) :
@@ -34,6 +36,9 @@ Player::~Player()
 
 void Player::Init(void)
 {
+	// モデルリソースの設定
+	transform_.SetModel(resMng_.GetHandle("player"));
+
     CharacterBase::Init();
 
 	// リスポン用タイマーの生成
@@ -110,6 +115,19 @@ void Player::ChangeActionStateSetPitFall()
     actionUpdate_ = std::bind(&Player::UpdateActionSetPitFall, this);
 }
 
+void Player::InitAnimation()
+{
+	anim_ = std::make_unique<AnimationController>(transform_.modelId);
+
+	for (int i = 0; i < static_cast<int>(ANIM_TYPE::MAX); i++)
+	{
+		anim_->Add(i, 30.0f, transform_.modelId);
+	}
+
+	// 初期アニメーション再生
+	anim_->Play(static_cast<int>(ANIM_TYPE::IDLE));
+}
+
 void Player::UpdateActionMove()
 {
 	// 移動操作処理
@@ -161,12 +179,12 @@ void Player::ProcessMove()
 		SetGoalRotate(rotRad);
 
 		// アニメーション処理
-		//animationController_->Play((int)ANIM_TYPE::RUN);
+		anim_->Play((int)ANIM_TYPE::WALK);
 	}
 	else
 	{
 		// アニメーション処理
-		//animationController_->Play((int)ANIM_TYPE::IDLE);
+		anim_->Play((int)ANIM_TYPE::IDLE);
 	}
 
 	// 移動後座標を設定

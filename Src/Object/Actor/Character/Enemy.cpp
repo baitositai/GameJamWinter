@@ -38,7 +38,7 @@ void Enemy::Init()
 	else
 	{
 		movePowX_ = MOVE_SPEED;
-		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(90.0f), 0.0f });
+		transform_.quaRotLocal = Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(-90.0f), 0.0f });
 		checkGoalMove_ = std::bind(&Enemy::IsGoalByMoveRight, this);
 	}
 }
@@ -46,12 +46,19 @@ void Enemy::Init()
 void Enemy::Draw()
 {
 	CharacterBase::Draw();
-
-	MV1DrawModel(transform_.modelId);
 }
 
 void Enemy::InitAnimation()
 {
+	anim_ = std::make_unique<AnimationController>(transform_.modelId);
+
+	for (int i = 0; i < static_cast<int>(ANIM_TYPE::MAX); i++)
+	{
+		anim_->Add(i, 30.0f, transform_.modelId);
+	}
+
+	// 初期アニメーション再生
+	anim_->Play(static_cast<int>(ANIM_TYPE::WALK));
 }
 
 void Enemy::UpdateAction()

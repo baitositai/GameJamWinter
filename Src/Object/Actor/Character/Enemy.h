@@ -5,6 +5,13 @@ class Enemy : public CharacterBase
 {
 public:
 
+	//アニメーション
+	enum class ANIM_TYPE
+	{
+		WALK = 26,
+		MAX,
+	};
+
 
 	/// <summary>
 	/// コンストラクタ
