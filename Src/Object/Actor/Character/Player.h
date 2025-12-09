@@ -10,6 +10,15 @@ class Player : public CharacterBase
 {
 public:
 
+
+	//アニメーション
+	enum class ANIM_TYPE
+	{
+		IDLE = 9,
+		WALK = 26,
+		MAX,
+	};
+
 	enum class ACTION_STATE
 	{
 		NONE,
@@ -138,6 +147,9 @@ private:
 	void ChangeActionStateNone();
 	void ChangeActionStateMove();
 	void ChangeActionStateSetPitFall();
+
+	//アニメーション初期化処理
+	void InitAnimation()override;
 
 	// 更新処理
 	void UpdateActionMove();

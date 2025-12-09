@@ -46,12 +46,19 @@ void Enemy::Init()
 void Enemy::Draw()
 {
 	CharacterBase::Draw();
-
-	MV1DrawModel(transform_.modelId);
 }
 
 void Enemy::InitAnimation()
 {
+	anim_ = std::make_shared<AnimationController>(transform_.modelId);
+
+	for (int i = 0; i < static_cast<int>(ANIM_TYPE::MAX); i++)
+	{
+		anim_->Add(i, 30.0f, transform_.modelId);
+	}
+
+	// 初期アニメーション再生
+	anim_->Play(static_cast<int>(ANIM_TYPE::WALK));
 }
 
 void Enemy::UpdateAction()
