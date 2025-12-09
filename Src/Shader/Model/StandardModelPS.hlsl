@@ -8,9 +8,6 @@
 // 法線マップ有効フラグ
 #define BUMPMAP 1
 
-// サブテクスチャの有効フラグ
-#define SUBTEXTUREMODE 7
-
 //PS
 #include "../Common/Pixel/PixelShader3DHeader.hlsli"
 
@@ -25,12 +22,6 @@ cbuffer cbParam : register(b4)
     
     float3 g_ambient_color;     // 環境光
     float dummy2;
-    
-    float3 g_spot_light_pos;    // スポットライト位置
-    float g_is_light;           // ライトの電源(0オフ、1オン)
-    
-    float3 g_spot_light_dir;    // スポットライト方向
-    float dummy4;
 }
 
 float4 main(PS_INPUT PSInput) : SV_TARGET0
@@ -56,25 +47,8 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     float3 diffuse = material * NdotL;
  
     // 最終カラー 
-    float3 litColor = saturate(ambientAttenuated + diffuse) * 0.8f;
-    
-    // サブテクスチャ色の取得
-    float4 subTexColor = subTexture.Sample(subSampler, uv);
-    litColor += subTexColor.rgb;
-   
-    // フォグ適用
-    float3 foggedColor = ApplyFog(litColor, PSInput.fogFactor);
-    
-    //// ポイントライト
-    //foggedColor += (POINT_LIGHT_COLOR * PSInput.lightPower);
-    
-    // 電源がオンの場合
-    // スポットライトの色計算
-    float3 spotLight = CalculateSpotLite(PSInput.world, g_spot_light_pos, g_spot_light_dir, normal);
-
-    // 色の加算(電源がオフの場合0乗算で追加値なし)
-    foggedColor += spotLight * g_is_light;
+    float3 litColor = saturate(ambientAttenuated + diffuse);
     
     // 色の出力
-    return float4(foggedColor, texColor.a);
+    return float4(litColor, texColor.a);
 }

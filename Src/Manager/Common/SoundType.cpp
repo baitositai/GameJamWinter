@@ -11,4 +11,9 @@ const std::map<std::string, SoundType::SE> SoundType::KEY_SE_MAP =
 {
 	{"seSelect", SoundType::SE::SELECT},
 	{"seDecision", SoundType::SE::DECISION},
+	{"seFall", SoundType::SE::FALL},
+	{"seCheers", SoundType::SE::CHEERS},
+	{"seGameStart", SoundType::SE::GAME_START},
+	{"seFinish", SoundType::SE::FINISH},
+	{"seWhistle", SoundType::SE::WHISTLE},
 };

@@ -4,6 +4,7 @@
 class ResourceManager;
 class SceneManager;
 class FontManager;
+class SoundManager;
 
 class CoreBase
 {
@@ -45,6 +46,7 @@ protected:
 	ResourceManager& resMng_;
 	SceneManager& scnMng_;
 	FontManager& fontMng_;
+	SoundManager& sndMng_;
 
 	// テキスト
 	CharacterString text_;
