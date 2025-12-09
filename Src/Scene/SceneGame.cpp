@@ -20,6 +20,7 @@
 #include "../Core/Common/Timer.h"
 #include "../Core/Main/Score.h"
 #include "../Core/Main/TitleScreen.h"
+#include "../Core/Main/GameStart.h"
 #include "../Utility/UtilityCommon.h"
 #include "../Utility/Utility3D.h"
 #include "ScenePause.h"
@@ -87,6 +88,10 @@ void SceneGame::Init(void)
 	// タイトル
 	title_ = std::make_unique<TitleScreen>();
 	title_->Init();
+
+	// ゲーム開始
+	start_ = std::make_unique<GameStart>();
+	start_->Init();
 
 	// カメラを固定
 	mainCamera.ChangeMode(Camera::MODE::FIXED_POINT);
@@ -288,6 +293,7 @@ void SceneGame::Reset()
 	gameTimer_->InitCountUp();
 	enemyCreateTimer_->InitCountUp();
 	title_->Init();
+	start_->Init();
 }
 
 void SceneGame::ChangeState(const STATE state)
@@ -403,7 +409,7 @@ void SceneGame::UpdateCameraRollDown()
 {	
 	if(camera_->IsEnd())
 	{
-		ChangeState(STATE::MAIN);
+		ChangeState(STATE::READY);
 	}
 	else
 	{
@@ -413,6 +419,14 @@ void SceneGame::UpdateCameraRollDown()
 
 void SceneGame::UpdateReady()
 {
+	if (start_->IsEnd())
+	{
+		ChangeState(STATE::MAIN);
+	}
+	else
+	{
+		start_->Update();
+	}
 }
 
 void SceneGame::UpdateMain()
@@ -479,6 +493,7 @@ void SceneGame::UpdateMain()
 
 void SceneGame::UpdateEnd()
 {
+
 }
 
 void SceneGame::UpdateResult()
@@ -504,6 +519,7 @@ void SceneGame::DrawTitle()
 
 void SceneGame::DrawReady()
 {
+	start_->Draw();
 }
 
 void SceneGame::DrawMain()

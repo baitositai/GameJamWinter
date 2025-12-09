@@ -16,6 +16,7 @@ class ControllerCamera;
 class Timer;
 class Score;
 class TitleScreen;
+class GameStart;
 
 class SceneGame : public SceneBase
 {
@@ -115,6 +116,9 @@ private:
 
 	// タイトル
 	std::unique_ptr<TitleScreen> title_;
+
+	// ゲームスタート
+	std::unique_ptr<GameStart> start_;
 
 	// 状態別更新処理
 	std::function<void()> update_;
