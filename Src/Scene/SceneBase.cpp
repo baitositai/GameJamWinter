@@ -34,6 +34,8 @@ void SceneBase::Load()
 
 void SceneBase::Init()
 {
+	// サウンドのリソースの切り替え
+	sndMng_.SceneChangeResources();
 }
 
 void SceneBase::Update()
@@ -54,17 +56,14 @@ void SceneBase::LoadingUpdate()
 		// ローディング中の更新処理
 		loading_.Update();
 		return;
-	}
+	}	
+	
+	// 処理の変更
+	ChangeNormal();
 
 	// ローディング完了後の処理
 	// 初期化
 	Init();
-
-	// サウンドのリソースの切り替え
-	sndMng_.SceneChangeResources();
-
-	// 処理の変更
-	ChangeNormal();
 }
 
 void SceneBase::NormalUpdate()

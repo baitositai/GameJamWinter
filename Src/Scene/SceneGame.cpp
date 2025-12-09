@@ -50,6 +50,8 @@ SceneGame::~SceneGame()
 
 void SceneGame::Init(void)
 {
+	SceneBase::Init();
+
 	// ポーズ画面のリソース
 	ScenePause_ = std::make_shared<ScenePause>();
 	ScenePause_->Load();
@@ -303,6 +305,14 @@ void SceneGame::ChangeStateTitle()
 
 	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
 	sndMng_.PlayBgm(SoundType::BGM::TITLE);
+
+	int i = 0;
+	if (!sndMng_.IsPlay(SoundType::BGM::TITLE))
+	{
+		i++;
+		return;
+	}
+	//PlaySoundMem(resMng_.GetHandle("bgmTitle"), DX_PLAYTYPE_LOOP);
 }
 
 void SceneGame::ChangeStateCameraRollDown()
@@ -314,6 +324,7 @@ void SceneGame::ChangeStateCameraRollDown()
 	camera_->Set(FIX_CAMERA_POS, FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
 
 	sndMng_.PlaySe(SoundType::SE::CHEERS);
+	//StopSoundMem(resMng_.GetHandle("bgmTitle"));
 	sndMng_.StopBgm(SoundType::BGM::TITLE);
 }
 
@@ -380,9 +391,10 @@ void SceneGame::UpdateTitle()
 		// 状態遷移
 		ChangeState(STATE::CAMERA_ROLL_TO_DOWN);
 	}
-
+	int i = 0;
 	if (!sndMng_.IsPlay(SoundType::BGM::TITLE))
 	{
+		i++;
 		return;
 	}
 }

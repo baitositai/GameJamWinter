@@ -9,11 +9,11 @@
 
 void Loading::Init()
 {
-	// シーン内のリソースを読み込む
-	ResourceManager::GetInstance().SceneChangeResource(static_cast<int>(SceneManager::GetInstance().GetSceneID()));
+	//// シーン内のリソースを読み込む
+	//ResourceManager::GetInstance().SceneChangeResource(static_cast<int>(SceneManager::GetInstance().GetSceneID()));
 
-	// サウンドのリソースの切り替え
-	SoundManager::GetInstance().SceneChangeResources();
+	//// サウンドのリソースの切り替え
+	//SoundManager::GetInstance().SceneChangeResources();
 
 	//ローディング用文字列設定
 	const std::wstring& fontName = ResourceManager::GetInstance().GetFontName("fontKazuki");

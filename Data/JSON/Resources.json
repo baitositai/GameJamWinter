@@ -2,7 +2,7 @@
   "resources": [
     {
       "key": "bgmTitle",
-      "sceneId": 0,
+      "sceneId": 1,
       "type": "sound",
       "path": "Data/Sound/BGM/BgmTitle.mp3",
       "soundType": "bgm"
