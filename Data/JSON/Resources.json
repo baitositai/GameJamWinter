@@ -161,6 +161,40 @@
       "sceneId": 0,
       "type": "effect",
       "path": "Data/Effect/Fall.efk"
+    },
+    {
+      "key": "draw",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/Draw.png"
+    },
+    {
+      "key": "finish",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/Finish.png"
+    },
+    {
+      "key": "start",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/Start.png"
+    },
+    {
+      "key": "win",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/Win.png"
+    },
+    {
+      "key": "playerPlates",
+      "sceneId": 0,
+      "type": "sprite",
+      "sizeX": 512,
+      "sizeY": 128,
+      "divX": 1,
+      "divY": 4,
+      "path": "Data/Image/PlayerPlates.png"
     }
   ]
 }
