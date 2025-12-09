@@ -1,12 +1,14 @@
 #include "CoreBase.h"
 #include "../Manager/Common/SceneManager.h"
+#include "../Manager/Common/SoundManager.h"
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 
 CoreBase::CoreBase() :
 	resMng_(ResourceManager::GetInstance()),
 	scnMng_(SceneManager::GetInstance()),
-	fontMng_(FontManager::GetInstance())
+	fontMng_(FontManager::GetInstance()),
+	sndMng_(SoundManager::GetInstance())
 {
 }
 

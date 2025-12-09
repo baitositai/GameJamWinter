@@ -42,6 +42,8 @@ public:
 
 		DEBUG_SCENE_CHANGE,		// デバッグシーン遷移
 
+
+
 		PAUSE,					// ポーズ(開閉)
 	};
 

@@ -36,7 +36,7 @@ private:
 	static constexpr float ROT_SPEED = 0.05f;
 
 	// スカイドーム位置
-	static constexpr VECTOR INIT_DOME_POS = { 0.0f, -1000.0f, 0.0f };
+	static constexpr VECTOR INIT_DOME_POS = { 0.0f, -2000.0f, 0.0f };
 
 	// スカイドームスケール
 	static constexpr VECTOR INIT_DOME_SCALE = { 100.0f, 100.0f, 100.0f };

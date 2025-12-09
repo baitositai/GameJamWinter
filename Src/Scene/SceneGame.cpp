@@ -19,6 +19,7 @@
 #include "../Object/Enviroment/Shadow.h"
 #include "../Core/Common/Timer.h"
 #include "../Core/Main/Score.h"
+#include "../Core/Main/TitleScreen.h"
 #include "../Utility/UtilityCommon.h"
 #include "../Utility/Utility3D.h"
 #include "ScenePause.h"
@@ -35,12 +36,12 @@ SceneGame::SceneGame()
 
 	// 状態遷移処理
 	changeStateMap_.emplace(STATE::TITLE, std::bind(&SceneGame::ChangeStateTitle, this));
-	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_GAME, std::bind(&SceneGame::ChangeStateCameraRollDown, this));
+	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_DOWN, std::bind(&SceneGame::ChangeStateCameraRollDown, this));
 	changeStateMap_.emplace(STATE::READY, std::bind(&SceneGame::ChangeStateReady, this));
 	changeStateMap_.emplace(STATE::MAIN, std::bind(&SceneGame::ChangeStateMain, this));
 	changeStateMap_.emplace(STATE::END, std::bind(&SceneGame::ChangeStateEnd, this));
 	changeStateMap_.emplace(STATE::RESULT, std::bind(&SceneGame::ChangeStateResult, this));
-	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_TITLE, std::bind(&SceneGame::ChangeStateCameraRollUp, this));
+	changeStateMap_.emplace(STATE::CAMERA_ROLL_TO_UP, std::bind(&SceneGame::ChangeStateCameraRollUp, this));
 }
 
 SceneGame::~SceneGame()
@@ -71,6 +72,7 @@ void SceneGame::Init(void)
 
 	// エフェクト制御
 	effect_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("petalFall"));
+	effectFall_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("Fall"));
 
 	// カメラ制御
 	camera_ = std::make_unique<ControllerCamera>();
@@ -80,8 +82,9 @@ void SceneGame::Init(void)
 	score_ = std::make_unique<Score>();
 	score_->Init();
 
-	// BGMの再生
-	sndMng_.PlayBgm(SoundType::BGM::GAME);
+	// タイトル
+	title_ = std::make_unique<TitleScreen>();
+	title_->Init();
 
 	// カメラを固定
 	mainCamera.ChangeMode(Camera::MODE::FIXED_POINT);
@@ -90,7 +93,7 @@ void SceneGame::Init(void)
 	mainCamera.SetAngles(TITLE_FIX_CAMERA_ANGLES);
 
 	// 再生
-	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), Utility3D::VECTOR_ZERO, 1.0f);
+	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), { 100.0f, 100.0f, 100.0f}, 1.0f);
 
 	// 初期状態設定
 	ChangeState(STATE::TITLE);
@@ -111,17 +114,11 @@ void SceneGame::NormalDraw(void)
 	// ステージの描画
 	stage_->Draw();
 
-	// プレイヤーの描画
-	for (const auto& player : players_)
-	{
-		player->Draw();
-	}
+	// 共通描画
+	DrawCommon();
 
-	// 敵の描画
-	for (const auto& enemy : enemies_)
-	{
-		enemy->Draw();
-	}
+	// 状態別UI描画
+	draw_();
 
 #ifdef _DEBUG
 
@@ -268,6 +265,9 @@ void SceneGame::Collision()
 				// プレイヤーの状態遷移
 				player->ChangeState(Player::STATE::FALL);
 
+				// SE再生
+				//sndMng_.PlaySe(SoundType::SE::FALL);
+
 				// 次のプレイヤーへ
 				break;
 			}
@@ -285,6 +285,7 @@ void SceneGame::Reset()
 	score_->Init();
 	gameTimer_->InitCountUp();
 	enemyCreateTimer_->InitCountUp();
+	title_->Init();
 }
 
 void SceneGame::ChangeState(const STATE state)
@@ -297,60 +298,92 @@ void SceneGame::ChangeState(const STATE state)
 void SceneGame::ChangeStateTitle()
 {
 	update_ = std::bind(&SceneGame::UpdateTitle, this);
+
+	draw_ = std::bind(&SceneGame::DrawTitle, this);
+
+	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
+	sndMng_.PlayBgm(SoundType::BGM::TITLE);
 }
 
 void SceneGame::ChangeStateCameraRollDown()
 {
 	update_ = std::bind(&SceneGame::UpdateCameraRollDown, this);
 
+	draw_ = std::bind(&SceneGame::DrawNone, this);
+
 	camera_->Set(FIX_CAMERA_POS, FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
+
+	sndMng_.PlaySe(SoundType::SE::CHEERS);
+	sndMng_.StopBgm(SoundType::BGM::TITLE);
 }
 
 void SceneGame::ChangeStateReady()
 {
 	update_ = std::bind(&SceneGame::UpdateReady, this);
+
+	draw_ = std::bind(&SceneGame::DrawReady, this);
+
+	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
+	sndMng_.PlayBgm(SoundType::BGM::GAME);
 }
 
 void SceneGame::ChangeStateMain()
 {
 	update_ = std::bind(&SceneGame::UpdateMain, this);
+
+	draw_ = std::bind(&SceneGame::DrawMain, this);
 }
 
 void SceneGame::ChangeStateEnd()
 {
 	update_ = std::bind(&SceneGame::UpdateEnd, this);
+
+	draw_ = std::bind(&SceneGame::DrawEnd, this);
 }
 
 void SceneGame::ChangeStateResult()
 {
 	update_ = std::bind(&SceneGame::UpdateResult, this);
+
+	draw_ = std::bind(&SceneGame::DrawResult, this);
 }
 
 void SceneGame::ChangeStateCameraRollUp()
 {
 	update_ = std::bind(&SceneGame::UpdateCameraRollUp, this);
+
+	draw_ = std::bind(&SceneGame::DrawNone, this);
 	
 	Reset();
 	
 	camera_->Set(TITLE_FIX_CAMERA_POS, TITLE_FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
+
+	sndMng_.PlaySe(SoundType::SE::CHEERS);
+	sndMng_.StopBgm(SoundType::BGM::GAME);
 }
 
 void SceneGame::UpdateTitle()
 {
-	// ゲーム開始
-	if (inputMng_.IsTrgDown(InputManager::TYPE::GAME_STATE_CHANGE))
+	title_->Update();
+
+	if (title_->IsEnd())
 	{
 		// プレイヤー生成
-		const int playerCnt = 1;
+		const int playerCnt = title_->GetPlayerNum();
 		for (int i = 0; i < playerCnt; i++)
 		{
-			auto player = std::make_shared<Player>(VECTOR{ 0,0,0 }, Input::JOYPAD_NO::PAD1);
+			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1));
 			player->Init();
 			players_.emplace_back(player);
 		}
 
 		// 状態遷移
-		ChangeState(STATE::CAMERA_ROLL_TO_GAME);
+		ChangeState(STATE::CAMERA_ROLL_TO_DOWN);
+	}
+
+	if (!sndMng_.IsPlay(SoundType::BGM::TITLE))
+	{
+		return;
 	}
 }
 
@@ -358,7 +391,7 @@ void SceneGame::UpdateCameraRollDown()
 {	
 	if(camera_->IsEnd())
 	{
-		ChangeState(STATE::MAIN);
+		ChangeState(STATE::READY);
 	}
 	else
 	{
@@ -393,6 +426,15 @@ void SceneGame::UpdateMain()
 		// 削除判定がある場合
 		if (enemies_[i]->IsDelete())
 		{
+			// 落下エフェクト
+			const float SCALE = 17.5f;
+			VECTOR pos = enemies_[i]->GetTransform().pos;
+			if (pos.y < 0.0f)
+			{
+				pos.y = 0.0f;
+				effectFall_->Play(pos, Quaternion::Identity(), { SCALE, SCALE, SCALE }, 1.0f, false);
+			}
+
 			// 敵削除
 			enemies_.erase(enemies_.begin() + i);
 		}
@@ -413,7 +455,7 @@ void SceneGame::UpdateMain()
 	// ゲーム終了
 	if (gameTimer_->CountUp())
 	{
-		ChangeState(STATE::CAMERA_ROLL_TO_TITLE);
+		ChangeState(STATE::CAMERA_ROLL_TO_UP);
 	}
 
 #ifdef _DEBUG	
@@ -440,6 +482,48 @@ void SceneGame::UpdateCameraRollUp()
 	else
 	{
 		camera_->Update();
+	}
+}
+
+void SceneGame::DrawTitle()
+{
+	title_->Draw();
+}
+
+void SceneGame::DrawReady()
+{
+}
+
+void SceneGame::DrawMain()
+{
+}
+
+void SceneGame::DrawEnd()
+{
+}
+
+void SceneGame::DrawResult()
+{
+}
+
+void SceneGame::DrawCommon()
+{
+	// タイトルのみ非表示
+	if (STATE::TITLE == state_)
+	{
+		return;
+	}
+
+	// プレイヤーの描画
+	for (const auto& player : players_)
+	{
+		player->Draw();
+	}
+
+	// 敵の描画
+	for (const auto& enemy : enemies_)
+	{
+		enemy->Draw();
 	}
 }
 

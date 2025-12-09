@@ -131,6 +131,11 @@ void SoundManager::PlayBgm(const SoundType::BGM key, const bool topPos, const in
 
 	//Ä¶
 	PlaySoundMem(loadedBgmMap_[key].handle, loadedBgmMap_[key].playType, topPos);
+
+	if (CheckSoundMem(loadedBgmMap_.at(key).handle) == 1)
+	{
+		return;
+	}
 }
 
 void SoundManager::PlaySe(const SoundType::SE key, const bool topPos, const int volume)
@@ -154,11 +159,21 @@ void SoundManager::StopBgm(const SoundType::BGM key)
 	//‰¹Œ¹‚ª‚ ‚é‚©Šm”F
 	auto it = loadedBgmMap_.find(key);
 
+	if (CheckSoundMem(loadedBgmMap_.at(key).handle) == 1)
+	{
+		return;
+	}
+
 	//‰¹Œ¹‚ª‚È‚¢ê‡‹­§’â~
 	assert(it != loadedBgmMap_.end()&& "’Ç‰Á‚µ‚Ä‚¢‚È‚¢‰¹Œ¹‚ğ’â~‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·");
 
 	//’â~
 	StopSoundMem(loadedBgmMap_[key].handle);
+
+	if (CheckSoundMem(loadedBgmMap_.at(key).handle) == 0)
+	{
+		return;
+	}
 }
 
 void SoundManager::StopSe(const SoundType::SE key)
@@ -250,6 +265,15 @@ bool SoundManager::IsCheckPlaySe(const SoundType::SE se) const
 
 	// Ä¶’†‚©Šm”F
 	return CheckSoundMem(loadedSeMap_.at(se).handle);
+}
+
+bool SoundManager::IsPlay(const SoundType::BGM bgm) const
+{
+	if (CheckSoundMem(loadedBgmMap_.at(bgm).handle) == 1)
+	{
+		return true;
+	}
+	return false;
 }
 
 void SoundManager::Release()

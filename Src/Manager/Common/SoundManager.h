@@ -108,6 +108,8 @@ public:
 	/// <returns>true‚Ìê‡Ä¶’†,false‚Ìê‡”ñÄ¶’†</returns>
 	bool IsCheckPlaySe(const SoundType::SE se) const;
 
+	bool IsPlay(const SoundType::BGM bgm) const;
+
 private:
 
 	static constexpr int MAX = 255;	//Å‘å’l
