@@ -37,6 +37,8 @@ void CharacterBase::Update()
 
 void CharacterBase::Draw()
 {
+	MV1DrawModel(transform_.modelId);
+
 	ActorBase::Draw();
 }
 

@@ -5,6 +5,13 @@ class Enemy : public CharacterBase
 {
 public:
 
+	//アニメーション
+	enum class ANIM_TYPE
+	{
+		WALK = 26,
+		MAX,
+	};
+
 
 	/// <summary>
 	/// コンストラクタ
@@ -15,7 +22,7 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~Enemy() override;
-	
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -47,7 +54,7 @@ private:
 	void UpdateAction() override;
 
 	// 落下の更新処理
-	void UpdateFall() override; 
+	void UpdateFall() override;
 
 	// 移動が右の場合の判定
 	bool IsGoalByMoveRight() const;
