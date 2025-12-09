@@ -153,7 +153,7 @@ void ResourceManager::SceneChangeResource(const int nextSceneId)
 	for (auto it = loadedMap_.begin(); it != loadedMap_.end(); )
 	{
 		// 共通リソース以外を破棄する
-		if (it->second->GetSceneId() != 0)
+   		if (it->second->GetSceneId() != 0)
 		{
 			it->second->Release();
 			it = loadedMap_.erase(it); // eraseして次へ

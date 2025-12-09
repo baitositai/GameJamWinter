@@ -1,0 +1,160 @@
+{
+  "resources": [
+    {
+      "key": "bgmTitle",
+      "sceneId": 1,
+      "type": "sound",
+      "path": "Data/Sound/BGM/BgmTitle.mp3",
+      "soundType": "bgm"
+    },
+    {
+      "key": "fontBokutachi",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Bokutachi.otf",
+      "fontName": "ぼくたちのゴシック"
+    },
+    {
+      "key": "fontDot",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Dot.otf",
+      "fontName": "ベストテンDOT"
+    },
+    {
+      "key": "fontHanazome",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/Hanazome.ttf",
+      "fontName": "はなぞめフォント"
+    },
+    {
+      "key": "fontKazuki",
+      "sceneId": 0,
+      "type": "font",
+      "path": "Data/Font/KazukiReiwa.ttf",
+      "fontName": "KazukiReiwa"
+    },
+    {
+      "key": "bgmGame",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/BGM/BgmGame.wav",
+      "soundType": "bgm"
+    },
+    {
+      "key": "seSelect",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeSelect.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seDecision",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeDecision.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seDecision",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeDecision.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seCheers",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeCheers.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seFinish",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeFinish.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seGameStart",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeGameStart.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seWhistle",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeWhistle.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seFall",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeFall.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "titleLogo",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/TitleLogo.png"
+    },
+    {
+      "key": "pushSpace",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/PushSpace.png"
+    },
+    {
+      "key": "numbers",
+      "sceneId": 0,
+      "type": "sprite",
+      "sizeX": 128,
+      "sizeY": 128,
+      "divX": 5,
+      "divY": 2,
+      "path": "Data/Image/Numbers.png"
+    },
+    {
+      "key": "selectPlayerNum",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/SelectPlayerNum.png"
+    },
+    {
+      "key": "stage",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Stage/Stage.mv1"
+    },
+    {
+      "key": "skyDome",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/SkyDome/SkyDome.mv1"
+    },
+    {
+      "key": "petalFall",
+      "sceneId": 0,
+      "type": "effect",
+      "path": "Data/Effect/PetalFall.efkefc"
+    },
+    {
+      "key": "enemy",
+      "sceneId": 0,
+      "type": "model",
+      "path": "Data/Model/Enemy/Enemy_Rabbit.mv1"
+    },
+    {
+      "key": "Fall",
+      "sceneId": 0,
+      "type": "effect",
+      "path": "Data/Effect/Fall.efk"
+    }
+  ]
+}
