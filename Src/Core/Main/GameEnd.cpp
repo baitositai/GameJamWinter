@@ -134,9 +134,9 @@ void GameEnd::ChangeStateResult()
 	int index = 0;
 	int score = 0;
 	displayScore_ = -1;
-	for (const auto& s : score_.GetScoreMap())
+	for (const auto& s : score_.GetScores())
 	{
-		score = s.second;
+		score = s;
 
 		// ˆø‚«•ª‚¯‚Ìê‡
 		if (displayScore_ == score)

@@ -114,7 +114,7 @@ void SceneGame::Init(void)
 
 	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
 	effectMaterial_ = std::make_unique<PixelMaterial>(resMng_.GetHandle("godRays"), 1);
-	effectMaterial_->AddConstBuf(FLOAT4{ 0.4f, 0.0f,0.98f, 0.5f });
+	effectMaterial_->AddConstBuf(FLOAT4{ 0.1f, 0.0f,0.98f, 0.7f });
 	effectMaterial_->AddTextureBuf(scnMng_.GetMainScreen());
 	effectRenderer_ = std::make_unique<PixelRenderer>(*effectMaterial_);
 	effectRenderer_->MakeSquereVertex({ 0,0 }, { Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y });
@@ -266,7 +266,7 @@ void SceneGame::Collision()
 	for (auto& player : players_)
 	{
 		// 無敵の場合
-		if (player->IsInvincible())
+		if (player->IsInvincible() || player->GetState() != Player::STATE::ACTION)
 		{
 			// 番号を更新して次へ
 			playerIndex++;
@@ -419,6 +419,9 @@ void SceneGame::UpdateTitle()
 			players_.emplace_back(player);
 		}
 
+		// スコア設定
+		score_->SetPlayerNum(playerCnt);
+
 		// 状態遷移
 		ChangeState(STATE::CAMERA_ROLL_TO_DOWN);
 	}
@@ -556,6 +559,7 @@ void SceneGame::DrawReady()
 
 void SceneGame::DrawMain()
 {
+	score_->Draw();
 }
 
 void SceneGame::DrawEnd()

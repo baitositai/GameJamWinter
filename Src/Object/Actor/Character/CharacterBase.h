@@ -53,6 +53,12 @@ public:
 	void ChangeState(const STATE state);
 
 	/// <summary>
+	/// 状態を返す
+	/// </summary>
+	/// <returns>状態</returns>
+	const STATE GetState() const { return state_; }
+
+	/// <summary>
 	/// コライダー情報を返す
 	/// </summary>
 	/// <returns>コライダー情報</returns>

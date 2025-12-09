@@ -63,7 +63,7 @@ void Player::Init(void)
 
 void Player::Draw(void)
 {
-	MV1SetEmiColorScale(transform_.modelId, COLOR);
+	MV1SetDifColorScale(transform_.modelId, COLOR);
 	MV1DrawModel(transform_.modelId);
 }
 
