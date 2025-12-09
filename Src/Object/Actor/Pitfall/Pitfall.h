@@ -2,6 +2,7 @@
 #include "../ActorBase.h"
 
 class ColliderSphere;
+class ControllerEffect;
 
 class Pitfall : public ActorBase
 {
@@ -18,6 +19,8 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~Pitfall();
+
+	void Init() override;
 
 	/// <summary>
 	/// コライダー情報を返す
@@ -44,6 +47,8 @@ private:
 
 	// コライダー
 	std::shared_ptr<ColliderSphere> collider_;
+
+	std::unique_ptr<ControllerEffect> effectPitFall_;
 
 	// トランスフォーム初期化処理
 	void InitTransform() override;

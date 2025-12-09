@@ -1,6 +1,7 @@
 #include "ActorBase.h"
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/SceneManager.h"
+#include "../Manager/Common/SoundManager.h"
 #include "../Manager/Game/CollisionManager.h"
 #include "../Utility/Utility3D.h"
 #include "../Utility/UtilityCommon.h"
@@ -12,6 +13,7 @@
 ActorBase::ActorBase() :
 	resMng_(ResourceManager::GetInstance()),
 	scnMng_(SceneManager::GetInstance()),
+	sndMng_(SoundManager::GetInstance()),
 	collMng_(CollisionManager::GetInstance()),
 	collFtr_(ColliderFactory::GetInstance())
 {	

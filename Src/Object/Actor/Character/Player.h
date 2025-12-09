@@ -16,6 +16,8 @@ public:
 	{
 		IDLE = 9,
 		WALK = 26,
+		SET = 15,
+		FALL = 19,
 		MAX,
 	};
 
@@ -31,7 +33,7 @@ public:
 	/// </summary>
 	/// <param name="initPos">初期位置</param>
 	/// <param name="padNo">PAD番号</param>
-	Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo);
+	Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color);
 
 	/// <summary>
 	/// デストラクタ
@@ -83,7 +85,7 @@ private:
 	static constexpr double ROT_DEG_R = 90;
 	static constexpr double ROT_DEG_L = -90;
 	static constexpr double ROT_DEG_F = 0;
-	static constexpr double ROT_GEG_B = 180;
+	static constexpr double ROT_DEG_B = 180;
 
 	// 生成位置までの距離
 	static constexpr float DISTANCE = 150.0f;
@@ -96,6 +98,9 @@ private:
 
 	// PAD番号
 	const Input::JOYPAD_NO MY_PAD_NO;
+
+	// カラー
+	const COLOR_F& COLOR;
 
 	//移動速度
 	float moveSpeed_;
@@ -143,6 +148,7 @@ private:
 	void UpdateFall() override;
 
 	// 状態遷移
+	void ChangeStateFall() override;
 	void ChangeActionState(const ACTION_STATE state);
 	void ChangeActionStateNone();
 	void ChangeActionStateMove();

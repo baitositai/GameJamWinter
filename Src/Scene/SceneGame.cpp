@@ -7,6 +7,8 @@
 #include "../Manager/Common/ResourceManager.h"
 #include "../Manager/Common/FontManager.h"
 #include "../Manager/Common/SoundManager.h"
+#include "../Render/PixelMaterial.h"
+#include "../Render/PixelRenderer.h"
 #include "../Object/Actor/Pitfall/Pitfall.h"
 #include "../Object/Actor/Character/Player.h"
 #include "../Object/Actor/Character/Enemy.h"
@@ -48,11 +50,17 @@ SceneGame::SceneGame()
 
 SceneGame::~SceneGame()
 {
+	DeleteGraph(postEffectScreen_);
+	DeleteSoundMem(bgmTitle_);
+	DeleteSoundMem(bgmGame_);
 }
 
 void SceneGame::Init(void)
 {
 	SceneBase::Init();
+
+	bgmGame_ = LoadSoundMem(L"Data/Sound/BGM/BgmGame.wav");
+	bgmTitle_ = LoadSoundMem(L"Data/Sound/BGM/BgmTitle.mp3");
 
 	// ポーズ画面のリソース
 	ScenePause_ = std::make_shared<ScenePause>();
@@ -104,6 +112,12 @@ void SceneGame::Init(void)
 	mainCamera.SetTargetPos(TITLE_FIX_CAMERA_TARGET_POS);
 	mainCamera.SetAngles(TITLE_FIX_CAMERA_ANGLES);
 
+	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
+	effectMaterial_ = std::make_unique<PixelMaterial>(resMng_.GetHandle("godRays"), 1);
+	effectMaterial_->AddConstBuf(FLOAT4{ 0.4f, 0.0f,0.98f, 0.5f });
+	effectMaterial_->AddTextureBuf(scnMng_.GetMainScreen());
+	effectRenderer_ = std::make_unique<PixelRenderer>(*effectMaterial_);
+	effectRenderer_->MakeSquereVertex({ 0,0 }, { Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y });
 	// 再生
 	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), { 100.0f, 100.0f, 100.0f}, 1.0f);
 
@@ -128,6 +142,14 @@ void SceneGame::NormalDraw(void)
 
 	// 共通描画
 	DrawCommon();
+
+	// ポストエフェクトの描画
+	SetDrawScreen(postEffectScreen_);
+	ClearDrawScreen();
+	effectMaterial_->SetTextureBuf(0, scnMng_.GetMainScreen());
+	effectRenderer_->Draw();
+	SetDrawScreen(scnMng_.GetMainScreen());
+	DrawGraph(0, 0, postEffectScreen_, true);
 
 	// 状態別UI描画
 	draw_();
@@ -278,7 +300,7 @@ void SceneGame::Collision()
 				player->ChangeState(Player::STATE::FALL);
 
 				// SE再生
-				//sndMng_.PlaySe(SoundType::SE::FALL);
+				sndMng_.PlaySe(SoundType::SE::FALL);
 
 				// 次のプレイヤーへ
 				break;
@@ -299,6 +321,7 @@ void SceneGame::Reset()
 	enemyCreateTimer_->InitCountUp();
 	title_->Init();
 	start_->Init();
+	finish_->Init();
 }
 
 void SceneGame::ChangeState(const STATE state)
@@ -315,15 +338,8 @@ void SceneGame::ChangeStateTitle()
 	draw_ = std::bind(&SceneGame::DrawTitle, this);
 
 	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
-	sndMng_.PlayBgm(SoundType::BGM::TITLE);
 
-	int i = 0;
-	if (!sndMng_.IsPlay(SoundType::BGM::TITLE))
-	{
-		i++;
-		return;
-	}
-	//PlaySoundMem(resMng_.GetHandle("bgmTitle"), DX_PLAYTYPE_LOOP);
+	PlaySoundMem(bgmTitle_, DX_PLAYTYPE_LOOP);
 }
 
 void SceneGame::ChangeStateCameraRollDown()
@@ -335,7 +351,7 @@ void SceneGame::ChangeStateCameraRollDown()
 	camera_->Set(FIX_CAMERA_POS, FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
 
 	sndMng_.PlaySe(SoundType::SE::CHEERS);
-	//StopSoundMem(resMng_.GetHandle("bgmTitle"));
+	StopSoundMem(bgmTitle_);
 	sndMng_.StopBgm(SoundType::BGM::TITLE);
 }
 
@@ -346,7 +362,9 @@ void SceneGame::ChangeStateReady()
 	draw_ = std::bind(&SceneGame::DrawReady, this);
 
 	sndMng_.FadeOutSe(SoundType::SE::CHEERS);
-	sndMng_.PlayBgm(SoundType::BGM::GAME);
+	PlaySoundMem(bgmGame_, DX_PLAYTYPE_LOOP);
+	sndMng_.PlaySe(SoundType::SE::GAME_START);
+	sndMng_.PlaySe(SoundType::SE::GAME_START_VOICE);
 }
 
 void SceneGame::ChangeStateMain()
@@ -361,6 +379,8 @@ void SceneGame::ChangeStateEnd()
 	update_ = std::bind(&SceneGame::UpdateEnd, this);
 
 	draw_ = std::bind(&SceneGame::DrawEnd, this);
+
+	sndMng_.PlaySe(SoundType::SE::WHISTLE);
 }
 
 void SceneGame::ChangeStateResult()
@@ -381,7 +401,7 @@ void SceneGame::ChangeStateCameraRollUp()
 	camera_->Set(TITLE_FIX_CAMERA_POS, TITLE_FIX_CAMERA_TARGET_POS, Utility3D::DIR_U, 0.0f, 2.0f);
 
 	sndMng_.PlaySe(SoundType::SE::CHEERS);
-	sndMng_.StopBgm(SoundType::BGM::GAME);
+	StopSoundMem(bgmGame_);
 }
 
 void SceneGame::UpdateTitle()
@@ -394,7 +414,7 @@ void SceneGame::UpdateTitle()
 		const int playerCnt = title_->GetPlayerNum();
 		for (int i = 0; i < playerCnt; i++)
 		{
-			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1));
+			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1), PLAYER_COLORS[i]);
 			player->Init();
 			players_.emplace_back(player);
 		}

@@ -28,11 +28,13 @@ void GameStart::Init()
 	start_.handleId = resMng_.GetHandle("start");
 	start_.pos = { Application::SCREEN_HALF_X, FIRST_POS_Y };
 	start_.scale = 1.5f;
+	start_.angle = 0.0f;
 
-	timer_ = std::make_unique<Timer>(0.5f);
+	timer_ = std::make_unique<Timer>(1.2f);
 	timer_->InitCountUp();
 
 	isEnd_ = false;
+	moveStep_ = 0.0f;
 
 	ChangeState(STATE::MOVE);
 }
@@ -86,7 +88,7 @@ void GameStart::UpdateExit()
 	constexpr int MOVE_Y = 20;
 	constexpr int LIMIT_X = Application::SCREEN_SIZE_X + 200;
 	constexpr int LIMIT_Y = -128;
-	constexpr float ANGLE = 0.2f;
+	constexpr float ANGLE = 0.5f;
 
 	start_.pos.x += MOVE_X;
 	start_.pos.y -= MOVE_Y;
@@ -118,4 +120,5 @@ void GameStart::ChangeStateWait()
 void GameStart::ChangeStateExit()
 {
 	update_ = std::bind(&GameStart::UpdateExit, this);
+	sndMng_.PlaySe(SoundType::SE::GAME_START2);
 }

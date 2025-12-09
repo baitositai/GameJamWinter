@@ -1,5 +1,6 @@
 #include "../../../Manager/Common/Camera.h"
 #include "../../../Manager/Common/SceneManager.h"
+#include "../../../Manager/Common/SoundManager.h"
 #include "../../../Utility/Utility3D.h"
 #include "../../../Utility/UtilityCommon.h"
 #include "../../../Scene/SceneGame.h"
@@ -8,9 +9,10 @@
 #include "../../Common/AnimationController.h"
 #include "Player.h"
 
-Player::Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo) :
+Player::Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color) :
     CharacterBase(initPos),
-    MY_PAD_NO(padNo)
+    MY_PAD_NO(padNo),
+	COLOR(color)
 {
 	movedPos_ = Utility3D::VECTOR_ZERO;
 	movePow_ = Utility3D::VECTOR_ZERO;
@@ -61,7 +63,8 @@ void Player::Init(void)
 
 void Player::Draw(void)
 {
-    CharacterBase::Draw();
+	MV1SetEmiColorScale(transform_.modelId, COLOR);
+	MV1DrawModel(transform_.modelId);
 }
 
 void Player::UpdateAction()
@@ -91,6 +94,13 @@ void Player::UpdateFall()
 	}
 }
 
+void Player::ChangeStateFall()
+{
+	CharacterBase::ChangeStateFall();
+
+	anim_->Play(static_cast<int>(ANIM_TYPE::FALL));
+}
+
 void Player::ChangeActionState(const ACTION_STATE state)
 {
     actionState_ = state;
@@ -108,21 +118,30 @@ void Player::ChangeActionStateMove()
     actionUpdate_ = std::bind(&Player::UpdateActionMove, this);
 
 	isCreatePitFall_ = true;
+
+	anim_->Play(static_cast<int>(ANIM_TYPE::IDLE));
 }
 
 void Player::ChangeActionStateSetPitFall()
 {
     actionUpdate_ = std::bind(&Player::UpdateActionSetPitFall, this);
+
+	anim_->Play(static_cast<int>(ANIM_TYPE::SET), false);
+
+	sndMng_.PlaySe(SoundType::SE::SET_PIT_FALL);
 }
 
 void Player::InitAnimation()
 {
+	constexpr float ANIMSPEED = 30.0f;
+
 	anim_ = std::make_shared<AnimationController>(transform_.modelId);
 
-	for (int i = 0; i < static_cast<int>(ANIM_TYPE::MAX); i++)
-	{
-		anim_->Add(i, 30.0f, transform_.modelId);
-	}
+	// アニメーションの追加
+	anim_->Add(static_cast<int>(ANIM_TYPE::IDLE), ANIMSPEED, transform_.modelId);
+	anim_->Add(static_cast<int>(ANIM_TYPE::WALK), ANIMSPEED, transform_.modelId);
+	anim_->Add(static_cast<int>(ANIM_TYPE::SET), ANIMSPEED, transform_.modelId);
+	anim_->Add(static_cast<int>(ANIM_TYPE::FALL), ANIMSPEED, transform_.modelId);
 
 	// 初期アニメーション再生
 	anim_->Play(static_cast<int>(ANIM_TYPE::IDLE));
@@ -147,11 +166,18 @@ void Player::UpdateActionMove()
 
 	// 移動座標の反映
 	transform_.pos = movedPos_;
+
+	// 回転の反映
+	transform_.quaRot = Quaternion();
+	transform_.quaRot = transform_.quaRot.Mult(playerRotY_);
 }
 
 void Player::UpdateActionSetPitFall()
 {
-	ChangeActionState(ACTION_STATE::MOVE);
+	if (anim_->IsEnd())
+	{
+		ChangeActionState(ACTION_STATE::MOVE);
+	}
 }
 
 void Player::ProcessMove()
@@ -163,10 +189,10 @@ void Player::ProcessMove()
 	double rotRad = 0.0f;
 
 	//操作
-	if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_RIGHT)) { dir = cameraRot.GetLeft(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_L); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_LEFT)) { dir = cameraRot.GetRight(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_R); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_DOWN)) { dir = cameraRot.GetForward(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_F); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_UP)) { dir = cameraRot.GetBack(); rotRad = UtilityCommon::Deg2RadD(ROT_GEG_B); }
+	if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_RIGHT)) { dir = cameraRot.GetLeft(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_R); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_LEFT)) { dir = cameraRot.GetRight(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_L); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_DOWN)) { dir = cameraRot.GetForward(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_B); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_UP)) { dir = cameraRot.GetBack(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_F); }
 
 	if (!Utility3D::EqualsVZero(dir))
 	{

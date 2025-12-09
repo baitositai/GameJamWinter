@@ -35,15 +35,20 @@ void GameEnd::Init()
 	scoreMes_.pos = { 900, Application::SCREEN_HALF_Y + 50 };
 
 	playerPlate_.handleIds = resMng_.GetHandles("playerPlates");
+	playerPlate_.div = { 1,4 };
 	playerPlate_.pos = { Application::SCREEN_HALF_X, 120 };
+	playerPlate_.scale = 1.2f;
 
 	numbers_.handleIds = resMng_.GetHandles("numbers");
+	numbers_.scale = 2.0f; 
 
 	message_.pos = { Application::SCREEN_HALF_X, 120 };
+	message_.handleId = resMng_.GetHandle("draw");
 
 	timer_ = std::make_unique<Timer>(0.5f);
 	timer_->InitCountUp();
 
+	moveStep_ = 0.0f;
 	isEnd_ = false;
 	isDraw_ = false;
 
@@ -157,12 +162,10 @@ void GameEnd::ChangeStateResult()
 	{
 		displayScore_ = 0;
 	}
-
-	// ‰æ‘œ‚ÌŠ„‚è“–‚Ä
-	message_.handleId = isDraw_ ? resMng_.GetHandle("draw") : resMng_.GetHandle("win");
-
 	//Œ…”
 	numberDigit_ = UtilityCommon::GetDigitCount(displayScore_);
+
+	sndMng_.PlaySe(SoundType::SE::APPLAUSE);
 }
 
 void GameEnd::DrawFinish()
@@ -172,20 +175,21 @@ void GameEnd::DrawFinish()
 
 void GameEnd::DrawResult()
 {
-	constexpr int NUMBER_OFFSET_X = 70;
+	constexpr int NUMBER_OFFSET_X = 200;
 	constexpr int POS_Y = Application::SCREEN_HALF_Y;
 	constexpr int MAX_DISITS = 3;
-	constexpr int OFFSET_POS_X = 100;
-	const int NUMBER_POS_X = numberDigit_ > 1 ? Application::SCREEN_HALF_X : Application::SCREEN_HALF_X - OFFSET_POS_X;
+	constexpr int OFFSET_POS_X = 200;
+	const int NUMBER_POS_X = numberDigit_ <= 1 ? Application::SCREEN_HALF_X : Application::SCREEN_HALF_X - OFFSET_POS_X;
 
 	playerPlate_.DrawRota();
 
-	message_.DrawRota();
+	if (isDraw_) { message_.DrawRota(); }
 
 	//”Žš‚Ì•`‰æ
 	for (int i = 0; i < numberDigit_; i++)
 	{
 		int index = UtilityCommon::GetDigit(displayScore_, numberDigit_ - 1 - i);
+		numbers_.index = index;
 		numbers_.pos = { NUMBER_POS_X + NUMBER_OFFSET_X * i,POS_Y, };
 		numbers_.DrawRota();
 	}

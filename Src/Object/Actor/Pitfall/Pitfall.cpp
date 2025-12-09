@@ -3,6 +3,7 @@
 #include "../../../Utility/Utility3D.h"
 #include "../../../Utility/UtilityCommon.h"
 #include "../../Collider/ColliderSphere.h"
+#include "../../Common/ControllerEffect.h"
 #include "Pitfall.h"
 
 Pitfall::Pitfall(const int ownerNo, const VECTOR& pos):
@@ -13,6 +14,17 @@ Pitfall::Pitfall(const int ownerNo, const VECTOR& pos):
 
 Pitfall::~Pitfall()
 {
+}
+
+void Pitfall::Init()
+{
+	ActorBase::Init();
+
+	effectPitFall_ = std::make_unique<ControllerEffect>(resMng_.GetHandle("setPitFall"));
+	VECTOR pos = transform_.pos;
+	pos.y += 50.0f;
+	float scale = 20.0f;
+	effectPitFall_->Play(pos, Quaternion(), { scale, scale, scale }, 1.0f, false);
 }
 
 void Pitfall::InitTransform()

@@ -18,6 +18,8 @@ class Score;
 class TitleScreen;
 class GameStart;
 class GameEnd;
+class PixelMaterial;
+class PixelRenderer;
 
 class SceneGame : public SceneBase
 {
@@ -56,6 +58,14 @@ public:
 	void Init() override;
 
 private:
+
+	// プレイヤーカラー
+	static constexpr COLOR_F PLAYER_COLORS[4] = {
+		{1.0f, 1.0f,1.0f, 1.0f},
+		{1.0f, 0.7f,0.7f, 1.0f},
+		{0.7f, 0.7f,1.0f, 1.0f},
+		{0.7f, 1.0f,1.0f, 1.0f},
+	};
 	
 	// タイトル視点
 	static constexpr VECTOR TITLE_FIX_CAMERA_POS = { 300.0f, 1350, 1120.0f };
@@ -73,14 +83,23 @@ private:
 	static constexpr float THIRD_ENEMY_CREATE_TIME = 0.6f;
 
 	// ゲーム時間
-	static constexpr float GAME_TIME = 5.0f;
+	static constexpr float GAME_TIME = 30.0f;
 
 	// 状態
 	STATE state_;
 
+	int bgmGame_;
+	int bgmTitle_;
+
+	int postEffectScreen_;
+
+	std::unique_ptr<PixelMaterial> effectMaterial_;
+	std::unique_ptr<PixelRenderer> effectRenderer_;
+
 	// エフェクトの制御
 	std::unique_ptr<ControllerEffect> effect_;
 	std::unique_ptr<ControllerEffect> effectFall_;
+	std::unique_ptr<ControllerEffect> effectPitFall_;
 
 	// カメラ制御
 	std::unique_ptr<ControllerCamera> camera_;

@@ -1,3 +1,4 @@
+#include "../../../Manager/Common/SoundManager.h"
 #include "../../../Utility/UtilityCommon.h"
 #include "../../Collider/ColliderCapsule.h"
 #include "../../Common/AnimationController.h"
@@ -62,6 +63,15 @@ void CharacterBase::ChangeStateAction()
 void CharacterBase::ChangeStateFall()
 {
 	update_ = std::bind(&CharacterBase::UpdateFall, this);
+
+	if (GetRand(10) == 0)
+	{
+		sndMng_.PlaySe(SoundType::SE::SCREEM);
+	}
+	else
+	{
+		sndMng_.PlaySe(SoundType::SE::FALL);
+	}
 }
 
 void CharacterBase::UpdateAction()
@@ -71,12 +81,13 @@ void CharacterBase::UpdateAction()
 void CharacterBase::UpdateFall()
 {
 	// —Ž‰º
-	transform_.pos.y -= 10.0f;
+	transform_.pos.y -= 5.0f;
 }
 
 void CharacterBase::InitTransform()
 {
-	transform_.scl = INITIAL_SCL;
+	constexpr float SCALE = 0.8f;
+	transform_.scl = { SCALE, SCALE, SCALE };
 	transform_.pos = INIT_POS;
 	transform_.rot = INITIAL_ROT;
 	transform_.quaRot = Quaternion();

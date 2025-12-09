@@ -99,6 +99,41 @@
       "soundType": "se"
     },
     {
+      "key": "seScreem",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeScreem.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seGameStartVoice",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeGameStartVoice.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seGameStart2",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeGameStart2.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seSetPitFall",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeSetPitFall.mp3",
+      "soundType": "se"
+    },
+    {
+      "key": "seApplause",
+      "sceneId": 0,
+      "type": "sound",
+      "path": "Data/Sound/SE/SeApplause.mp3",
+      "soundType": "se"
+    },
+    {
       "key": "titleLogo",
       "sceneId": 0,
       "type": "texture",
@@ -163,6 +198,12 @@
       "path": "Data/Effect/Fall.efk"
     },
     {
+      "key": "setPitFall",
+      "sceneId": 0,
+      "type": "effect",
+      "path": "Data/Effect/SetPitFall.efkefc"
+    },
+    {
       "key": "draw",
       "sceneId": 0,
       "type": "texture",
@@ -193,10 +234,16 @@
       "path": "Data/Image/Score.png"
     },
     {
+      "key": "godRays",
+      "sceneId": 0,
+      "type": "pixelShader",
+      "path": "Data/Shader/GodRays.cso"
+    },
+    {
       "key": "playerPlates",
       "sceneId": 0,
       "type": "sprite",
-      "sizeX": 512,
+      "sizeX": 745,
       "sizeY": 128,
       "divX": 1,
       "divY": 4,

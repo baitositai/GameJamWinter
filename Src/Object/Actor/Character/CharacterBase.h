@@ -88,7 +88,7 @@ protected:
 	// ó‘Ô‘JˆÚˆ—
 	void ChangeStateNone();
 	void ChangeStateAction();
-	void ChangeStateFall();
+	virtual void ChangeStateFall();
 
 	// XVˆ—
 	void UpdateNone() {};

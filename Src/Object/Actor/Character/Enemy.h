@@ -9,6 +9,7 @@ public:
 	enum class ANIM_TYPE
 	{
 		WALK = 26,
+		FALL = 19,
 		MAX,
 	};
 
@@ -55,6 +56,8 @@ private:
 
 	// —‰º‚ÌXVˆ—
 	void UpdateFall() override;
+
+	void ChangeStateFall() override;
 
 	// ˆÚ“®‚ª‰E‚Ìê‡‚Ì”»’è
 	bool IsGoalByMoveRight() const;

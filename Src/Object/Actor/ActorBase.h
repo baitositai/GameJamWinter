@@ -7,6 +7,7 @@ class ModelRenderer;
 
 class ResourceManager;
 class SceneManager;
+class SoundManager;
 class CollisionManager;
 class ColliderFactory;
 class ColliderBase;
@@ -97,6 +98,7 @@ protected:
 	// シングルトン参照
 	ResourceManager& resMng_;
 	SceneManager& scnMng_;
+	SoundManager& sndMng_;
 	CollisionManager& collMng_;
 	ColliderFactory& collFtr_;
 
