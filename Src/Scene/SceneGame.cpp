@@ -403,7 +403,7 @@ void SceneGame::UpdateCameraRollDown()
 {	
 	if(camera_->IsEnd())
 	{
-		ChangeState(STATE::READY);
+		ChangeState(STATE::MAIN);
 	}
 	else
 	{
