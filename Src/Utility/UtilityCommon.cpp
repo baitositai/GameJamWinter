@@ -474,3 +474,35 @@ float UtilityCommon::NormalizeMinMax(const float value, const float min, const f
     if (normalized > 1.0) return 1.0;
     return normalized;
 }
+
+int UtilityCommon::GetDigit(const int value, const int digit)
+{
+    //負の値にも対応するため絶対値を取る
+    int ret = (value < 0) ? -value : value;
+
+    //10のdigit乗で割って1の位を抽出
+    for (int i = 0; i < digit; ++i)
+    {
+        ret /= 10;
+    }
+
+    return ret % 10;
+}
+
+int UtilityCommon::GetDigitCount(const int value)
+{
+    // 0 の桁数は 1
+    if (value == 0) return 1;
+
+    // マイナス値は絶対値に変換
+    int ret = std::abs(value);
+
+    int digit = 0;
+    while (ret > 0)
+    {
+        ret /= 10;
+        ++digit;
+    }
+
+    return digit;
+}

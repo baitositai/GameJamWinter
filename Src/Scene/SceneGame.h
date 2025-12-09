@@ -17,6 +17,7 @@ class Timer;
 class Score;
 class TitleScreen;
 class GameStart;
+class GameEnd;
 
 class SceneGame : public SceneBase
 {
@@ -72,7 +73,7 @@ private:
 	static constexpr float THIRD_ENEMY_CREATE_TIME = 0.6f;
 
 	// ゲーム時間
-	static constexpr float GAME_TIME = 30.0f;
+	static constexpr float GAME_TIME = 5.0f;
 
 	// 状態
 	STATE state_;
@@ -116,6 +117,9 @@ private:
 
 	// タイトル
 	std::unique_ptr<TitleScreen> title_;
+
+	// ゲーム終了
+	std::unique_ptr<GameEnd> finish_;
 
 	// ゲームスタート
 	std::unique_ptr<GameStart> start_;

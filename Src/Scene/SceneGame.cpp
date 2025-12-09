@@ -21,6 +21,7 @@
 #include "../Core/Main/Score.h"
 #include "../Core/Main/TitleScreen.h"
 #include "../Core/Main/GameStart.h"
+#include "../Core/Main/GameEnd.h"
 #include "../Utility/UtilityCommon.h"
 #include "../Utility/Utility3D.h"
 #include "ScenePause.h"
@@ -92,6 +93,10 @@ void SceneGame::Init(void)
 	// ゲーム開始
 	start_ = std::make_unique<GameStart>();
 	start_->Init();
+
+	// ゲーム終了
+	finish_ = std::make_unique<GameEnd>(*score_);
+	finish_->Init();
 
 	// カメラを固定
 	mainCamera.ChangeMode(Camera::MODE::FIXED_POINT);
@@ -481,7 +486,7 @@ void SceneGame::UpdateMain()
 	// ゲーム終了
 	if (gameTimer_->CountUp())
 	{
-		ChangeState(STATE::CAMERA_ROLL_TO_UP);
+		ChangeState(STATE::END);
 	}
 
 #ifdef _DEBUG	
@@ -493,7 +498,14 @@ void SceneGame::UpdateMain()
 
 void SceneGame::UpdateEnd()
 {
-
+	if (finish_->IsEnd())
+	{
+		ChangeState(STATE::CAMERA_ROLL_TO_UP);
+	}
+	else
+	{
+		finish_->Update();
+	}
 }
 
 void SceneGame::UpdateResult()
@@ -528,6 +540,7 @@ void SceneGame::DrawMain()
 
 void SceneGame::DrawEnd()
 {
+	finish_->Draw();
 }
 
 void SceneGame::DrawResult()

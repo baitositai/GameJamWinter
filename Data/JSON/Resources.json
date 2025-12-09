@@ -187,6 +187,12 @@
       "path": "Data/Image/Win.png"
     },
     {
+      "key": "score",
+      "sceneId": 0,
+      "type": "texture",
+      "path": "Data/Image/Score.png"
+    },
+    {
       "key": "playerPlates",
       "sceneId": 0,
       "type": "sprite",

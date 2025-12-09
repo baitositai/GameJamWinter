@@ -28,6 +28,12 @@ public:
 	/// <param name="score">スコア量</param>
 	void SetScore(const int playerNo, const int score);
 
+	/// <summary>
+	/// スコア管理を返す
+	/// </summary>
+	/// <returns></returns>
+	const std::unordered_map<int, int>& GetScoreMap() const { return playerScoreMap_; }
+
 private:
 
 	// プレイヤースコアの管理マップ
