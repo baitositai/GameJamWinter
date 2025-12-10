@@ -291,10 +291,10 @@ void SceneGame::Collision()
 			if (Utility3D::CheckHitSphereToCapsule(sphereRadius, spherePos, capPosTop, capPosEnd, capRadius))
 			{
 				// スコアを格納
-				score_->SetScore(pitFalls_[i]->GetOwnerNo(), 1);
+				score_->SetScore(pitFalls_[i]->GetOwnerNo(), 3);
 
 				// 落下者のスコアを原点
-				score_->SetScore(playerIndex, -1);
+				score_->SetScore(playerIndex, -4);
 
 				// プレイヤーの状態遷移
 				player->ChangeState(Player::STATE::FALL);
@@ -460,11 +460,11 @@ void SceneGame::UpdateReady()
 void SceneGame::UpdateMain()
 {
 	// ポーズ画面
-	if (inputMng_.IsTrgDown(InputManager::TYPE::PAUSE))
-	{
-		scnMng_.PushScene(ScenePause_);
-		return;
-	}
+	//if (inputMng_.IsTrgDown(InputManager::TYPE::PAUSE))
+	//{
+	//	scnMng_.PushScene(ScenePause_);
+	//	return;
+	//}
 
 	// プレイヤー更新
 	for (const auto& player : players_)

@@ -189,10 +189,10 @@ void Player::ProcessMove()
 	double rotRad = 0.0f;
 
 	//操作
-	if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_RIGHT)) { dir = cameraRot.GetLeft(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_R); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_LEFT)) { dir = cameraRot.GetRight(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_L); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_DOWN)) { dir = cameraRot.GetForward(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_B); }
-	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_UP)) { dir = cameraRot.GetBack(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_F); }
+	if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_RIGHT, MY_PAD_NO)) { dir = cameraRot.GetLeft(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_R); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_LEFT, MY_PAD_NO)) { dir = cameraRot.GetRight(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_L); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_DOWN, MY_PAD_NO)) { dir = cameraRot.GetForward(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_B); }
+	else if (ins.IsNew(InputManager::TYPE::PLAYER_MOVE_UP, MY_PAD_NO)) { dir = cameraRot.GetBack(); rotRad = UtilityCommon::Deg2RadD(ROT_DEG_F); }
 
 	if (!Utility3D::EqualsVZero(dir))
 	{
@@ -222,7 +222,7 @@ void Player::ProcessCreatePitFall()
 	auto& ins = InputManager::GetInstance();
 
 	// 特定のキーを入力したかつ生成可能の場合
-	if (ins.IsTrgDown(InputManager::TYPE::PLAYER_CREATE_PIT_FALL) && isCreatePitFall_)
+	if (ins.IsTrgDown(InputManager::TYPE::PLAYER_CREATE_PIT_FALL, MY_PAD_NO) && isCreatePitFall_)
 	{
 		// 生成不可にする
 		isCreatePitFall_ = false;
