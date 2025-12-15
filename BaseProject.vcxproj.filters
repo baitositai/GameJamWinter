@@ -689,8 +689,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shader\PostEffect\Vignette.hlsl" />
-    <FxCompile Include="Src\Shader\Model\StandardModelPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\StandardModelVS.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\LensDistortion.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\Monotone.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\ScanLine.hlsl" />
@@ -698,27 +696,19 @@
     <FxCompile Include="Src\Shader\Sprite\Glitch.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\NormalEffect.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\NightViewEffect.hlsl" />
-    <FxCompile Include="Src\Shader\Model\StageMainPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\StageMainVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\PaintingPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\PaintingVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\EnemyVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\EnemyPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\GhostVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\GhostPS.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\SnowNoiseEffect.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\RipplisEffect.hlsl" />
-    <FxCompile Include="Src\Shader\Model\GrassRoomPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\GrassPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\GrassVS.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\TitleSelectEffect.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\Cracks.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\GameScreenEffect.hlsl" />
-    <FxCompile Include="Src\Shader\Model\NormalMeshDepthShadowPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\NormalMeshDepthShadowVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\NormalMeshDirLightDepthShadowVS.hlsl" />
     <FxCompile Include="Src\Shader\Model\StagePS.hlsl" />
     <FxCompile Include="Src\Shader\PostEffect\GodRays.hlsl" />
+    <FxCompile Include="Src\Shader\Model\ShadowPS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\ShadowVS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\StageVS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\CharacterVs.hlsl" />
+    <FxCompile Include="Src\Shader\Model\CharacterPs.hlsl" />
+    <FxCompile Include="Src\Shader\Model\ShadowSkinMeshVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Src\Shader\Common\Pixel\PixelShader2DHeader.hlsli" />

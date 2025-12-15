@@ -77,7 +77,7 @@ void SceneManager::Init3D()
 	ChangeLightTypeDir({ 0.2f, -1.0f, 0.2f });
 
 	// ライトの方向を設定
-	SetLightDirection(VGet(0.5f, -0.5f, 0.5f));
+	SetLightDirection(VGet(-0.5f, -0.5f, -0.5f));
 
 	// フォグ設定
 	//SetFogEnable(true);

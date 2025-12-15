@@ -168,6 +168,30 @@
       "path": "Data/Model/Stage/Stage.mv1"
     },
     {
+      "key": "stagePs",
+      "sceneId": 0,
+      "type": "pixelShader",
+      "path": "Data/Shader/StagePS.cso"
+    },
+    {
+      "key": "stageVs",
+      "sceneId": 0,
+      "type": "vertexShader",
+      "path": "Data/Shader/StageVS.cso"
+    },
+    {
+      "key": "characterVs",
+      "sceneId": 0,
+      "type": "vertexShader",
+      "path": "Data/Shader/CharacterVS.cso"
+    },
+    {
+      "key": "characterPs",
+      "sceneId": 0,
+      "type": "pixelShader",
+      "path": "Data/Shader/CharacterPS.cso"
+    },
+    {
       "key": "skyDome",
       "sceneId": 0,
       "type": "model",

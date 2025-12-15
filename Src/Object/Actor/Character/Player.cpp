@@ -9,8 +9,8 @@
 #include "../../Common/AnimationController.h"
 #include "Player.h"
 
-Player::Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color) :
-    CharacterBase(initPos),
+Player::Player(SceneGame& parent, const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color) :
+    CharacterBase(parent, initPos),
     MY_PAD_NO(padNo),
 	COLOR(color)
 {

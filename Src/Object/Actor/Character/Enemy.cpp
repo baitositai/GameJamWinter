@@ -10,8 +10,8 @@ namespace
 	static constexpr float LEFT_GOAL = SceneGame::MOVE_LIMIT_MIN_X - 500;
 }
 
-Enemy::Enemy(const VECTOR& initPos) :
-	CharacterBase(initPos)
+Enemy::Enemy(SceneGame& parent, const VECTOR& initPos) :
+	CharacterBase(parent, initPos)
 {
 	movePowX_ = 0.0f;
 }

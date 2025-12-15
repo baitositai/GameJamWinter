@@ -1,10 +1,15 @@
 #include "../../../Manager/Common/SoundManager.h"
+#include "../../../Manager/Common/ResourceManager.h"
 #include "../../../Utility/UtilityCommon.h"
 #include "../../Collider/ColliderCapsule.h"
 #include "../../Common/AnimationController.h"
+#include "../../../Render/ModelMaterial.h"
+#include "../../../Render/ModelRenderer.h"
+#include "../../../Scene/SceneGame.h"
 #include "CharacterBase.h"
 
-CharacterBase::CharacterBase(const VECTOR& initPos) :
+CharacterBase::CharacterBase(SceneGame& parent, const VECTOR& initPos) :
+	parent_(parent),
 	INIT_POS(initPos)
 {
 	state_ = STATE::NONE;
@@ -19,6 +24,23 @@ CharacterBase::~CharacterBase()
 
 void CharacterBase::Init()
 {
+
+	normalMaterial_ = std::make_unique<ModelMaterial>(resMng_.GetHandle("characterVs"), 2, resMng_.GetHandle("characterPs"), 2);
+	normalRenderer_ = std::make_unique<ModelRenderer>(transform_.modelId, *normalMaterial_);
+
+	VECTOR cameraPos = GetCameraPosition();
+	float fogStart, fogEnd;
+	GetFogStartEnd(&fogStart, &fogEnd);
+	VECTOR lightDir = GetLightDirection();
+	normalMaterial_->AddConstBufVS(FLOAT4{ cameraPos.x, cameraPos.y, cameraPos.z, 0.0f });
+	normalMaterial_->AddConstBufVS(FLOAT4{ fogStart, fogEnd, 0.0f, 0.0f });
+	normalMaterial_->AddConstBufPS(FLOAT4{ 0.0f, 0.0f, 0.0f, 0.0f });
+	normalMaterial_->AddConstBufPS(FLOAT4{ lightDir.x, lightDir.y, lightDir.z, 0.0f });
+	normalMaterial_->AddConstBufVSMatrix(parent_.GetLightViewMatrix());
+	normalMaterial_->AddConstBufVSMatrix(parent_.GetLightProjectionMatrix());
+
+	normalMaterial_->SetTextureBuf(8, parent_.GetShadowMapTex());
+
 	ActorBase::Init();
 
 	InitAnimation();
@@ -38,9 +60,18 @@ void CharacterBase::Update()
 
 void CharacterBase::Draw()
 {
-	MV1DrawModel(transform_.modelId);
-
-	ActorBase::Draw();
+	VECTOR cameraPos = GetCameraPosition();
+	float fogStart, fogEnd;
+	GetFogStartEnd(&fogStart, &fogEnd);
+	VECTOR lightDir = GetLightDirection();
+	normalMaterial_->SetConstBufVS(0, FLOAT4{ cameraPos.x, cameraPos.y, cameraPos.z, 0.0f });
+	normalMaterial_->SetConstBufVS(1, FLOAT4{ fogStart, fogEnd, 0.0f, 0.0f });
+	normalMaterial_->SetConstBufPS(0, FLOAT4{ 0.0f, 0.0f, 0.0f, 0.0f });
+	normalMaterial_->SetConstBufPS(1, FLOAT4{ lightDir.x, lightDir.y, lightDir.z, 0.0f });
+	normalMaterial_->SetConstBufVSMatrix(0, parent_.GetLightViewMatrix());
+	normalMaterial_->SetConstBufVSMatrix(1, parent_.GetLightProjectionMatrix());
+	normalMaterial_->SetTextureBuf(8, parent_.GetShadowMapTex());
+	normalRenderer_->Draw();
 }
 
 void CharacterBase::ChangeState(const STATE state)

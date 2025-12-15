@@ -1,3 +1,4 @@
+#include <memory>
 #include "ModelRenderer.h"
 
 ModelRenderer::ModelRenderer(int modelId, ModelMaterial& modelMaterial)
@@ -87,23 +88,65 @@ void ModelRenderer::SetReserveVS(void)
 		constBufsPtr->w = constBufs[i].w;
 	}
 
-	// マトリックスの設定
-	const auto& mats = modelMaterial_.GetMatrixs();
-	if (!mats.empty())
-	{
-		for (const auto& mat : mats)
-		{
-			SetVSConstFMtx(mat.first, mat.second);
-		}
-	}
-
 	// 頂点シェーダー用の定数バッファを更新して書き込んだ内容を反映する
 	UpdateShaderConstantBuffer(constBuf);
 
 	// 頂点シェーダー用の定数バッファを定数バッファレジスタにセット
 	SetShaderConstantBuffer(
 		constBuf, DX_SHADERTYPE_VERTEX, CONSTANT_BUF_SLOT_BEGIN_VS);
+	//-----------------------------------------------------------------------------------------
 
+	// 定数バッファハンドル
+	int constBufM = modelMaterial_.GetConstBufVSMatrix();
+
+	// 書き込み元のマトリックスのstd::vectorを取得
+	const auto& constBufsM = modelMaterial_.GetConstBufsVSMatrix();
+
+	// 必要なバイトサイズ
+	// constBufsM.size() 個の MATRIX (sizeof(MATRIX) バイト)
+	// DXライブラリの MATRIX は 4x4 float で 64 バイト
+	size_t requiredSize = constBufsM.size() * sizeof(MATRIX);
+
+	// ポインタを取得 (MATRIX* 型にキャストして利用するのが一番安全で分かりやすい)
+	// GetBufferShaderConstantBuffer が返すポインタは、バッファの先頭です。
+	// 書き込むデータの型 (ここでは MATRIX) にキャストします。
+	MATRIX* constBufsMPtr = (MATRIX*)GetBufferShaderConstantBuffer(constBufM);
+
+	// バッファへの書き込みが可能かチェック（省略可能だが安全のため）
+	if (!constBufsMPtr)
+	{
+		// エラー処理
+		return;
+	}
+	if (!constBufsM.empty())
+	{
+		// 書き込み元（std::vectorの先頭アドレス）から、書き込み先（定数バッファの先頭アドレス）へ一括コピー
+		// constBufsM.data() は std::vector の要素の先頭アドレスを返します。
+		// requiredSize はコピーするバイト数です。
+		memcpy(constBufsMPtr, constBufsM.data(), requiredSize);
+	}
+
+	for (size_t i = 0; i < constBufsM.size(); ++i)
+	{
+		// constBufsM[i] のマトリックス全体を、
+		// constBufsMPtr[i] (つまり constBufsMPtr の先頭から i 番目の MATRIX の位置) にコピーします。
+		// memcpy(&constBufsMPtr[i], &constBufsM[i], sizeof(MATRIX)); // これでも良い
+
+		// ポインタ直接操作による代入の場合
+		// *constBufsMPtr = constBufsM[i];
+		// constBufsMPtr++; // 次のマトリックスの先頭へポインタを進める
+		//
+		// 今回は分かりやすく、配列のインデックスアクセス形式で処理します。
+		constBufsMPtr[i] = constBufsM[i];
+	}
+
+	// 頂点シェーダー用の定数バッファを更新して書き込んだ内容を反映する
+	UpdateShaderConstantBuffer(constBufM);
+
+	// 頂点シェーダー用の定数バッファを定数バッファレジスタにセット
+	SetShaderConstantBuffer(constBufM, DX_SHADERTYPE_VERTEX, 8);
+
+	//-----------------------------------------------------------------------------------------
 	// 頂点シェーダー設定
 	SetUseVertexShader(modelMaterial_.GetShaderVS());
 

@@ -33,7 +33,7 @@ public:
 	/// </summary>
 	/// <param name="initPos">初期位置</param>
 	/// <param name="padNo">PAD番号</param>
-	Player(const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color);
+	Player(SceneGame& parent, const VECTOR& initPos, const Input::JOYPAD_NO padNo, const COLOR_F& color);
 
 	/// <summary>
 	/// デストラクタ

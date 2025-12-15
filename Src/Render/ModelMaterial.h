@@ -31,10 +31,12 @@ public:
 
 	// 定数バッファを追加
 	void AddConstBufVS(const FLOAT4& contBuf);
+
 	void AddConstBufPS(const FLOAT4& contBuf);
 
 	// 定数バッファを更新
 	void SetConstBufVS(int idx, const FLOAT4& contBuf);
+
 	void SetConstBufPS(int idx, const FLOAT4& contBuf);
 
 	// テクスチャを更新
@@ -46,10 +48,12 @@ public:
 
 	// 定数バッファハンドル
 	int GetConstBufVS(void) const;
+	int GetConstBufVSMatrix(void) const;
 	int GetConstBufPS(void) const;
 
 	// 定数バッファ
 	const std::vector<FLOAT4>& GetConstBufsVS(void) const;
+	const std::vector<MATRIX>& GetConstBufsVSMatrix(void) const;
 	const std::vector<FLOAT4>& GetConstBufsPS(void) const;
 
 	// 画像
@@ -62,10 +66,8 @@ public:
 	void SetTextureAddress(TEXADDRESS texA);
 
 	// マトリックスを返す
-	const std::map<int, MATRIX>& GetMatrixs() const;
-
-	// マトリックスの設定
-	void SetConstMtx(const int idx, const MATRIX& mat);
+	void AddConstBufVSMatrix(const MATRIX& matrix);
+	void SetConstBufVSMatrix(int idx, const MATRIX& matrix);
 
 private:
 
@@ -81,6 +83,9 @@ private:
 	// 頂点定数バッファハンドル
 	int constBufVS_;
 
+	// 頂点定数バッファマトリックス用ハンドル
+	int constBufVSMatrix_;
+
 	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
 	int constBufFloat4SizePS_;
 
@@ -93,13 +98,11 @@ private:
 	// 定数定数バッファ
 	std::vector<FLOAT4> constBufsVS_;
 
+	std::vector<MATRIX> constBufsVSMatrix_;
+
 	// ピクセル定数バッファ
 	std::vector<FLOAT4> constBufsPS_;
 
 	// 画像
 	std::map<int, int> textures_;
-
-	// マトリックス
-	std::map<int, MATRIX> matrixs_;
-
 };

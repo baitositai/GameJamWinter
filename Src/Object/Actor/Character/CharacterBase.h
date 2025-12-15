@@ -3,6 +3,7 @@
 #include <functional>
 #include "../ActorBase.h"
 
+class SceneGame;
 class ColliderCapsule;
 class AnimationController;
 
@@ -24,7 +25,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="initPos">初期位置</param>
-	CharacterBase(const VECTOR& initPos);
+	CharacterBase(SceneGame& parent, const VECTOR& initPos);
 
 	/// <summary>
 	/// デストラクタ
@@ -81,6 +82,8 @@ protected:
 
 	//アニメーション
 	std::shared_ptr<AnimationController> anim_;
+
+	SceneGame& parent_;
 
 	// 状態
 	STATE state_;

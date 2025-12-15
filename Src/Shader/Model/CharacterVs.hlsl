@@ -1,30 +1,44 @@
 // VS/PS共通
 #include "../Common/VertexToPixelHeader.hlsli"
-
+ 
 // IN
 #include "../Common/Vertex/VertexInputType.hlsli"
-#define VERTEX_INPUT DX_MV1_VERTEX_TYPE_NMAP_8FRAME
-
+#define VERTEX_INPUT DX_MV1_VERTEX_TYPE_8FRAME
+ 
 // OUT
-#define VS_OUTPUT VertexToPixelLit
+#define VS_OUTPUT VertexToPixelLitFog
 #include "../Common/Vertex/VertexShader3DHeader.hlsli"
 
 #define L_W_MAT g_localWorldMatrix.lwMatrix
-
+ 
+// 定数バッファ：スロット7番目
 cbuffer cbParam : register(b7)
 {
     float3 g_camera_pos;
-    float g_fog_start;
+    float dummy1;
     
-    float3 g_light_pos;
+    float g_fog_start;
     float g_fog_end;
+    float dummy2;
+    float g_light_num;
+ 
+    float4 g_light_pos[30];
+ 
 }
-
+ 
+// 定数バッファ：スロット8番目
+cbuffer cbParamShadow : register(b8)
+{
+    float4x4 g_light_viewmatrix;
+    float4x4 g_light_projectionMatrix;
+};
+ 
 VS_OUTPUT main(VS_INPUT VSInput)
 {
-    VS_OUTPUT ret;
-    
-    // スキンメッシュ用のローカル⇒ワールド変換行列を作成+++( 開始 )
+ 
+	VS_OUTPUT ret;
+ 
+   // スキンメッシュ用のローカル⇒ワールド変換行列を作成+++( 開始 )
     int4 lBoneIdx;
     float4 lL_W_Mat[3];
     float4 lWeight;
@@ -78,7 +92,7 @@ VS_OUTPUT main(VS_INPUT VSInput)
     lWorldPosition.x = dot(lLocalPosition, lL_W_Mat[0]);
     lWorldPosition.y = dot(lLocalPosition, lL_W_Mat[1]);
     lWorldPosition.z = dot(lLocalPosition, lL_W_Mat[2]);
-    ret.world = lWorldPosition.xyz;
+    //ret.world = lWorldPosition.xyz;
     
     // 法線スキニング
     lWorldNormal.x = dot(float4(localNormal, 0.0f), lL_W_Mat[0]);
@@ -94,30 +108,42 @@ VS_OUTPUT main(VS_INPUT VSInput)
     // ビュー座標を射影座標に変換
     ret.svPos = mul(lViewPosition, g_base.projectionMatrix);
     
-    // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 開始 )
-    // UV座標
+    // ライトのビュー座標をライトの射影座標に変換
+    float4 lLViewPosition = mul(g_light_viewmatrix, lWorldPosition);
+ 
+	// ライトのビュー座標をライトの射影座標に変換
+    ret.lightAtPos = mul(g_light_projectionMatrix, lLViewPosition).xyz;
+	// 頂点座標変換 +++++++++++++++++++++++++++++++++++++( 終了 )
+ 
+	// その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 開始 )
+	// UV座標
     ret.uv.x = VSInput.uv0.x;
     ret.uv.y = VSInput.uv0.y;
-    // 法線
+	// 法線をローカル空間からワールド空間へ変換
+	//ret.normal = VSInput.norm;
     ret.normal = normalize(mul(VSInput.norm, (float3x3) g_base.localWorldMatrix));
-    
-    // ディフューズカラー
+	// ディフューズカラー
     ret.diffuse = VSInput.diffuse;
-    
-    // スペキュラーカラー
-    //ret.specular = VSInput.specular;
-    
-    // フォグの強さ
-    float foglength = length(lWorldPosition.xyz - g_camera_pos);
-    float fog = (g_fog_end - foglength) / (g_fog_end - g_fog_start);
-    ret.fogFactor = saturate(fog);
-    
-    // ポイントライト
-    float lightDit = 200.0f;
-    float lightLength = length(lWorldPosition.xyz - g_light_pos);
-    ret.lightPower = saturate((lightDit - lightLength) / lightDit);
-    // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 終了 )
-    
-    // 出力パラメータを返す
+	// ライト方向(ローカル)
+    //ret.lightDir = float3(0.0f, 0.0f, 0.0f);
+	// ライトから見た座標
+	//ret.lightAtPos = float3(0.0f, 0.0f, 0.0f);
+	// フォグの強さ(0.0:フォグが濃い、1.0:フォグが薄い)
+    ret.fogFactor =
+		clamp((g_fog_end - length(lWorldPosition.xyz - g_camera_pos)) / (g_fog_end - g_fog_start), 0.0, 1.0);
+ 
+	// ポイントライトの強さ(0.0:暗い、1.0:明るい)
+    float lightDis = 700.0f;
+    float lightPower = 0.0f;
+    int num = (int) g_light_num;
+    for (int i = 0; i < num; i++)
+    {
+        lightPower += 1.0f - clamp(length(lWorldPosition.xyz - g_light_pos[i].xyz) / lightDis, 0.0, 1.0);
+    }
+    ret.lightPower = lightPower;
+	// その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 終了 )
+ 
+	// 出力パラメータを返す
     return ret;
+ 
 }

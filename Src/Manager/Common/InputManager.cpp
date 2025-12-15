@@ -37,6 +37,7 @@ void InputManager::Init()
 	RegisterTrigger(TYPE::GAME_STATE_CHANGE, { KEY_INPUT_SPACE }, { BTN::RB_RIGHT });
 
 	RegisterTrigger(TYPE::DEBUG_SCENE_CHANGE, { KEY_INPUT_RSHIFT }, { });
+	RegisterTrigger(TYPE::DEBUG_CAMERA_CHANGE, { KEY_INPUT_TAB }, { });
 }
 
 void InputManager::Update()

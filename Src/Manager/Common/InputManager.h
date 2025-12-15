@@ -42,6 +42,8 @@ public:
 
 		DEBUG_SCENE_CHANGE,		// デバッグシーン遷移
 
+		DEBUG_CAMERA_CHANGE,		// デバッグカメラ切替
+
 
 
 		PAUSE,					// ポーズ(開閉)

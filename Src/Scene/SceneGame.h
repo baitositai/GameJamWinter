@@ -57,7 +57,16 @@ public:
 	/// </summary>
 	void Init() override;
 
+	const MATRIX& GetLightViewMatrix() const { return lightViewMatrix_; }
+
+	const MATRIX& GetLightProjectionMatrix() const { return lightProjectionMatrix_; }
+
+	const int GetShadowMapTex() const { return shadowMapTex_; }
+
 private:
+
+	MATRIX lightViewMatrix_;
+	MATRIX lightProjectionMatrix_;
 
 	// プレイヤーカラー
 	static constexpr COLOR_F PLAYER_COLORS[4] = {
@@ -85,8 +94,19 @@ private:
 	// ゲーム時間
 	static constexpr float GAME_TIME = 30.0f;
 
+	// シャドウマップサイズ
+	static constexpr int SHADOW_MAP_SIZE = 8192;
+
 	// 状態
 	STATE state_;
+
+	// 影を描画するための変数
+	//----------------------------------
+	int shadowMapTex_;			// シャドウマップのテクスチャハンドル
+	int shadow0vertexShader_;	// 頂点シェーダハンドル
+	int shadow0pixelShader_;	// ピクセルシェーダハンドル
+	int shadow6vertexShader_;	// 頂点シェーダハンドル
+	int shadow6pixelShader_;	// ピクセルシェーダハンドル
 
 	int bgmGame_;
 	int bgmTitle_;
@@ -152,6 +172,8 @@ private:
 	// 状態遷移管理
 	std::unordered_map<STATE, std::function<void()>> changeStateMap_;
 
+	std::unordered_map<STATE, std::function<void()>> screenTexMap_;
+
 	// 更新関数
 	void NormalUpdate() override;
 
@@ -206,4 +228,7 @@ private:
 	//デバッグ処理
 	void DebugUpdate();
 	void DebugDraw();
+
+	// シャドウマップの生成
+	void DrawShadowMap();
 };

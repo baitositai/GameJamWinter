@@ -53,6 +53,8 @@ SceneGame::~SceneGame()
 	DeleteGraph(postEffectScreen_);
 	DeleteSoundMem(bgmTitle_);
 	DeleteSoundMem(bgmGame_);
+	DeleteShader(shadow0pixelShader_);
+	DeleteShader(shadow0vertexShader_);
 }
 
 void SceneGame::Init(void)
@@ -67,7 +69,7 @@ void SceneGame::Init(void)
 	ScenePause_->Load();
 
 	// ステージ
-	stage_ = std::make_unique<Stage>();
+	stage_ = std::make_unique<Stage>(*this);
 	stage_->Init();
 
 	// スカイドーム
@@ -121,6 +123,18 @@ void SceneGame::Init(void)
 	// 再生
 	effect_->Play({0.0f,0.0f,0.0f}, Quaternion(), { 100.0f, 100.0f, 100.0f}, 1.0f);
 
+	SetCreateDrawValidGraphChannelNum(1);
+	SetDrawValidFloatTypeGraphCreateFlag(TRUE);
+	SetCreateGraphColorBitDepth(24);
+	shadowMapTex_ = MakeScreen(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, false);
+	SetDrawValidFloatTypeGraphCreateFlag(FALSE);
+	SetCreateDrawValidGraphChannelNum(4);
+	SetCreateGraphChannelBitDepth(0);
+
+	shadow0pixelShader_ = LoadPixelShader(L"Data/Shader/ShadowPS.cso");
+	shadow0vertexShader_ = LoadVertexShader(L"Data/Shader/ShadowVS.cso");
+	shadow6vertexShader_ = LoadVertexShader(L"Data/Shader/ShadowSkinMeshVS.cso");
+
 	// 初期状態設定
 	ChangeState(STATE::TITLE);
 }
@@ -134,11 +148,15 @@ void SceneGame::NormalUpdate(void)
 
 void SceneGame::NormalDraw(void)
 {	
-	// スカイドームの描画
+	DrawShadowMap();
+	
+	// // スカイドームの描画
 	skyDome_->Draw();
 
 	// ステージの描画
 	stage_->Draw();
+	// ステージの描画
+	//MV1DrawModel(stage_->GetTransform().modelId);
 
 	// 共通描画
 	DrawCommon();
@@ -153,6 +171,8 @@ void SceneGame::NormalDraw(void)
 
 	// 状態別UI描画
 	draw_();
+
+	//DrawExtendGraph(Application::SCREEN_SIZE_X - 128, Application::SCREEN_SIZE_Y -128, Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, shadowMapTex_, TRUE);
 
 #ifdef _DEBUG
 
@@ -214,7 +234,7 @@ void SceneGame::CreateEnemy()
 		pos.z = MOVE_LIMIT_MIN_Z + OFFSET_Z_MIN + GetRand(MOVE_LIMIT_MAX_X - (MOVE_LIMIT_MIN_Z + OFFSET_Z_MIN) - OFFSET_Z_MAX);
 
 		// 敵を生成
-		auto enemy = std::make_shared<Enemy>(pos);
+		auto enemy = std::make_shared<Enemy>(*this, pos);
 		enemy->Init();
 		enemies_.push_back(enemy);
 	}
@@ -414,7 +434,7 @@ void SceneGame::UpdateTitle()
 		const int playerCnt = title_->GetPlayerNum();
 		for (int i = 0; i < playerCnt; i++)
 		{
-			auto player = std::make_shared<Player>(VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1), PLAYER_COLORS[i]);
+			auto player = std::make_shared<Player>(*this, VECTOR{ -200.0f + 150.0f * i,0.0f,0.0f }, static_cast<Input::JOYPAD_NO>(i + 1), PLAYER_COLORS[i]);
 			player->Init();
 			players_.emplace_back(player);
 		}
@@ -607,11 +627,15 @@ void SceneGame::DebugDraw(void)
 	VECTOR cPos = mainCamera.GetPos();
 	VECTOR cTarget = mainCamera.GetTargetPos();
 	VECTOR cAngles = mainCamera.GetAngles();
+	VECTOR shadowPos = mainCamera.GetShadowLightPos();
+	VECTOR shadowTarget = mainCamera.GetShadowLightTarget();
 
 	DrawFormatString(0, 60, UtilityCommon::RED, L"カメラ位置：%2f,%2f,%2f", cPos.x, cPos.y, cPos.z);
 	DrawFormatString(0, 80, UtilityCommon::RED, L"注視点位置：%2f,%2f,%2f", cTarget.x, cTarget.y, cTarget.z);
 	DrawFormatString(0, 100, UtilityCommon::RED, L"カメラ角度：%2f,%2f,%2f", cAngles.x, cAngles.y, cAngles.z);
 	DrawFormatString(0, 120, UtilityCommon::RED, L"ゲーム時間：%d", gameTimer_->GetCount());
+	DrawFormatString(0, 140, UtilityCommon::RED, L"影位置：%2f, %2f, %2f", shadowPos.x, shadowPos.y, shadowPos.z);
+	DrawFormatString(0, 160, UtilityCommon::RED, L"影注視点：%2f, %2f, %2f", shadowTarget.x, shadowTarget.y, shadowTarget.z);
 
 	// 移動制限の区域を描画
 	constexpr float OFFSET_Y = 50.0f;
@@ -630,4 +654,98 @@ void SceneGame::DebugDraw(void)
 	top = { MOVE_LIMIT_MAX_X, OFFSET_Y, MOVE_LIMIT_MIN_Z };
 	end = { MOVE_LIMIT_MIN_X, OFFSET_Y, MOVE_LIMIT_MIN_Z };
 	DrawLine3D(top, end, UtilityCommon::RED);
+
+	if (mainCamera.GetMode() == Camera::MODE::FREE && inputMng_.IsTrgDown(InputManager::TYPE::DEBUG_CAMERA_CHANGE))
+	{
+		mainCamera.ChangeMode(Camera::MODE::SHADOW_MOVE);
+	}
+	else if (mainCamera.GetMode() == Camera::MODE::SHADOW_MOVE && inputMng_.IsTrgDown(InputManager::TYPE::DEBUG_CAMERA_CHANGE))
+	{
+		mainCamera.ChangeMode(Camera::MODE::FREE);
+	}
+}
+
+void SceneGame::DrawShadowMap()
+{
+	SetDrawScreen(shadowMapTex_);
+
+	// 影用深度記録画像を真っ白にクリア
+	SetBackgroundColor(255, 255, 255);
+	ClearDrawScreen();
+	SetBackgroundColor(0, 0, 0);
+
+	// シャドウカメラの設定
+	mainCamera.CameraSettingShadow();
+
+	// 設定したカメラのビュー行列と射影行列を取得しておく
+	lightViewMatrix_ = GetCameraViewMatrix();
+	lightProjectionMatrix_ = GetCameraProjectionMatrix();
+
+	// モデルの描画にオリジナルのシェーダーを使用するように設定する
+	MV1SetUseOrigShader(TRUE);
+
+	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット
+	SetUseVertexShader(shadow0vertexShader_);
+
+	// 深度記録画像への描画用のピクセルシェーダーをセット
+	SetUsePixelShader(shadow0pixelShader_);
+
+	// ステージの描画
+	MV1DrawModel(stage_->GetTransform().modelId);
+
+	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット
+	//SetUseVertexShader(shadow4vertexShader_);
+
+	// 深度記録画像への描画用のピクセルシェーダーをセット
+	//SetUsePixelShader(shadow4pixelShader_);
+
+	// -----------------------------------------------------------------
+	MV1SetUseOrigShader(FALSE);
+	SetUseVertexShader(-1);
+	SetUsePixelShader(-1);
+	// 前回使用分のテクスチャを引き継がないように
+	SetUseTextureToShader(0, -1);
+
+	// キャラクター描画
+	// -----------------------------------------------------------------
+	MV1SetUseOrigShader(TRUE);
+
+	//auto shadow6 = renIns.GetShaderHandle(RendererManager::SHADER_TYPE::DEPTH_SHADOW6OLD);
+
+	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット
+	SetUseVertexShader(shadow6vertexShader_);
+
+	// 深度記録画像への描画用のピクセルシェーダーをセット
+	//SetUsePixelShader(shadow6pixelShader_);
+
+	// キャラクターの描画
+	for (auto& player : players_)
+	{
+		MV1DrawModel(player->GetTransform().modelId);
+	}
+
+	// 敵の描画
+	for (auto& enemy : enemies_)
+	{
+		MV1DrawModel(enemy->GetTransform().modelId);
+	}
+
+	// -----------------------------------------------------------------
+
+
+	// Shaderを元に戻す
+	MV1SetUseOrigShader(FALSE);
+	SetUseVertexShader(-1);
+	SetUsePixelShader(-1);
+	// 前回使用分のテクスチャを引き継がないように
+	SetUseTextureToShader(0, -1);
+
+	// 描画スクリーンを元に戻す
+	SetDrawScreen(scnMng_.GetMainScreen());
+
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// カメラ設定を元に戻す
+	SceneManager::GetInstance().GetCamera().CameraSetting();
 }

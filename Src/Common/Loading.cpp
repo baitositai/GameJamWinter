@@ -52,7 +52,7 @@ void Loading::StartASyncLoad()
 	isLoading_ = true;
 
 	// 非同期読み込みを有効にする
-	SetUseASyncLoadFlag(true);
+	//SetUseASyncLoadFlag(true);
 
 	// ローディング時間の初期化
 	loadingTime_ = 0.0f;

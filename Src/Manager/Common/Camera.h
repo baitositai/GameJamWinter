@@ -21,6 +21,9 @@ public:
 	// カメラクリップ：NEAR
 	static constexpr float CAMERA_FAR = 30000.0f;
 
+	static constexpr VECTOR LIGHT_POS = {2976, 2281, 1985};
+	static constexpr VECTOR LIGHT_TARGET = { 2889, 2127, 2079 };
+
 	// カメラの初期座標
 	static constexpr VECTOR DEFAULT_CAMERA_POS = { 0.0f, 100.0f, -500.0f };
 
@@ -49,6 +52,7 @@ public:
 		FIXED_POINT,	// 固定点
 		FOLLOW,			// 追従
 		FPS,			// FPS視点
+		SHADOW_MOVE,		// 影描画用移動
 		FREE,			// 自由
 	};
 
@@ -85,6 +89,11 @@ public:
 	/// カメラの設定
 	/// </summary>
 	void CameraSetting();
+
+	/// <summary>
+	/// 影描画用のカメラ設定
+	/// </summary>
+	void CameraSettingShadow();
 		
 	/// <summary>
 	/// 描画処理
@@ -188,7 +197,15 @@ public:
 	/// <param name="cameraUpVector">カメラ方向</param>
 	void SetCameraUpVector(const VECTOR& cameraUpVector);
 
+	const VECTOR GetShadowLightPos() const { return shadowLightPos_; }
+	const VECTOR GetShadowLightTarget() const { return shadowLighTarget_; }
+	void SetShadowLightPos(const VECTOR& pos) { shadowLightPos_ = pos; }
+	void SetShadowLightTarget(const VECTOR& pos) { shadowLighTarget_ = pos; }
+
 private:
+
+	VECTOR shadowLightPos_;
+	VECTOR shadowLighTarget_;
 
 	InputManager& input_;
 
@@ -236,6 +253,7 @@ private:
 	void ProcessRotFollow();	// 追従モードの回転操作
 	void ProcessRotFps();		// FPSモードの回転操作
 	void ProcessRotFree();		// 自由モードの回転操作
+	void ProcessRotFreeShadow();
 
 	//モード別状態遷移処理
 	void ChangeModeNone();
@@ -243,6 +261,7 @@ private:
 	void ChangeModeFollow();
 	void ChangeModeFps();
 	void ChangeModeFree();
+	void ChangeModeShadow();
 
 	// モード別更新ステップ
 	void SetBeforeDrawNone() {};
@@ -250,5 +269,6 @@ private:
 	void SetBeforeDrawFollow();
 	void SetBeforeDrawFps();
 	void SetBeforeDrawFree();
+	void SetBeforeDrawShadow();
 };
 

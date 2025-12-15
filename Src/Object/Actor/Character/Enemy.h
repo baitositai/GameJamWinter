@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Enemy(const VECTOR& initPos);
+	Enemy(SceneGame& parent, const VECTOR& initPos);
 
 	/// <summary>
 	/// デストラクタ

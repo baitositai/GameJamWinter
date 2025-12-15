@@ -1,6 +1,8 @@
 #pragma once
 #include "../ActorBase.h"
 
+class SceneGame;
+
 class Stage : public ActorBase
 {
 public:
@@ -8,7 +10,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Stage();
+	Stage(SceneGame& parent);
 
 	/// <summary>
 	/// デストラクタ
@@ -24,4 +26,8 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw()override;
+
+private:
+
+	SceneGame& parent_;
 };
